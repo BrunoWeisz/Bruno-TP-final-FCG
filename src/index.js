@@ -1,16 +1,49 @@
+import * as THREE from 'https://cdn.skypack.dev/three'
+import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js'
+
+function threee(){
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    const cube = new THREE.Mesh( geometry, material );
+    scene.add( cube );
+
+    camera.position.z = 5;
+
+    function animate() {
+        requestAnimationFrame( animate );
+
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        renderer.render( scene, camera );
+    };
+
+    animate();
+}
+threee();
+
 const cv1 = document.getElementById("frequency-bar");
 const ctx1 = cv1.getContext('2d');
 const cv2 = document.getElementById("osciloscope");
 const ctx2 = cv2.getContext('2d');
 
-function loadAudio(files){
-    let file = files[0];
+document.querySelector("input").addEventListener("change", handleFiles, false);
+
+function handleFiles(){
+    console.log(this);
+    let file = this.files[0];
     let audioUrl = window.URL.createObjectURL(file);
     const audioEl = document.querySelector("audio");
     audioEl.src = audioUrl;
 
     setUpAudio(audioEl);
-    
 }
 
 function setUpAudio(audioElement){
@@ -27,7 +60,6 @@ function setUpAudio(audioElement){
     let dataArray = new Uint8Array(bufferLength);
     let dataArray2 = new Uint8Array(bufferLength);
 
-    
     console.log(ctx1);
     drawFrequency(cv1, ctx1, analyser, dataArray);
     drawOsciloscope(cv2, ctx2, analyser, dataArray);
@@ -101,4 +133,4 @@ function drawOsciloscope(canvas, canvasCtx, analyser, dataArray) {
     canvasCtx.stroke();
 }
 
-
+//export default loadAudio;
