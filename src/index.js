@@ -1,53 +1,39 @@
 import * as THREE from 'https://cdn.skypack.dev/three'
+//import Queue from './fixedQueue'
 //import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js'
 const canvas = document.getElementById("visualization");
 const canvasCtx = canvas.getContext('2d');
+let animationFrameId;
 
-function threee(){
-
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
-
-    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.z = 5;
-    const scene = new THREE.Scene();
- 
-    const geometry = new THREE.BoxGeometry();
-
-    /*const material = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
-    const cube = new THREE.Mesh( geometry, material );*/
-    const material = new THREE.PointsMaterial({color:'red', size: 0.2});
-    const cube = new THREE.Points(geometry, material);
-
-    scene.add( cube );
-
-    const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-    light.position.set(-1,2,4);
-    scene.add(light);
-
-    function animate() {
-        requestAnimationFrame( animate );
-
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-
-        renderer.render( scene, camera );
-    };
-
-    animate();
+const Queue = function(size){
+    return{
+        _size: size,
+        _array: [],
+        add: function(el){
+            if (this._array < this._size){
+                this._array.push(el);
+            } else {
+                this._array.push(el);
+                this._array.shift();
+            }
+        },
+        mean: function(){
+            return this._array.reduce((pv,cv) => cv/this._array.length + pv)
+        }
+    }
 }
-threee();
 
 const Visualization = (function(){
 
     const visualizations = {
         "frequency-1": drawFrequency,
-        "osciloscope-1": drawOsciloscope 
+        "osciloscope-1": drawOsciloscope,
+        "growing-circle": drawGrowingCircle 
     }
 
     const visualize = function(aVisualizationName, anAnalizer){
-        console.log(visualizations[aVisualizationName])
+        //canvasCtx.restore();
+        cancelAnimationFrame(animationFrameId);
         visualizations[aVisualizationName](anAnalizer);
     }
 
@@ -122,44 +108,61 @@ const EventHandler = (function(){
 
 
 EventHandler.setLoadFile();
-/*
+
 function drawGrowingCircle(analyser){
+
+    console.log("started circle");
     let fov = 75;
     let ratio = canvas.clientWidth / canvas.clientHeight;
     let near = .1;
     let far = 100;
 
+
     //-----------------------------//
-
-
-    const renderer = new THREE.WebGLRenderer({canvas});
+    
+    //const renderer = new THREE.WebGLRenderer({canvas: canvas});
+    const renderer = new THREE.WebGLRenderer(); 
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    console.log(renderer.domElement.setAttribute('style', ''));
+    document.body.appendChild( renderer.domElement );
+    
     const camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
     const scene = new THREE.Scene();
-    const light = new THREE.DirectionalLight(0xBBBBBB, 1);
+    const light = new THREE.DirectionalLight(0xBBBBBB, .5);
     scene.add(light);
     light.position.set(3,3,5);
     camera.position.set(0,0,5);
 
-    const cube = new THREE.BoxGeometry();
+    const sphere = new THREE.SphereGeometry();
     const basicMaterial = new THREE.MeshPhongMaterial({color: 0xBBBBBB});
-    const cubeMesh = new THREE.Mesh(cube, basicMaterial);
-    //cubeMesh.position.set(0,0,-2);
-    scene.add(cubeMesh);
+    const sphereMesh = new THREE.Mesh(sphere, basicMaterial);
+    sphereMesh.position.set(0,0,-2);
+    scene.add(sphereMesh);
 
-    //renderer.render(scene, camera);
+    let delayedData = Queue(10);
 
     function render(time) {
-        //console.log('rendering');
         adaptSize();
-        cubeMesh.rotation.x = 0.001*time;
-        cubeMesh.rotation.y = 0.001*time;
+
+        analyser.fftSize = 32;
+        let bufferLength = analyser.frequencyBinCount;
+        let dataArray = new Uint8Array(bufferLength);
+        analyser.getByteFrequencyData(dataArray);
+
+        let scale = computeScale(dataArray);
+        delayedData.add(scale);
+        let ss = delayedData.mean();
         
-
+        sphereMesh.scale.set(ss,ss,ss);
+        sphereMesh.material.color.setRGB(ss,0,0);
         renderer.render( scene, camera );
-        requestAnimationFrame( render );
+        animationFrameId = requestAnimationFrame(render.bind(this, analyser));
     };
-    requestAnimationFrame(render);
+    animationFrameId = requestAnimationFrame(render.bind(this, analyser));
 
+    function computeScale(data){
+        return data.reduce((pv,cv) => cv/data.length + pv)/150;
+    }
 
     function adaptSize(){
         //console.log("resizing");
@@ -171,16 +174,15 @@ function drawGrowingCircle(analyser){
         }
     };
 }
-*/
+
 function drawFrequency(analyser){
 
     analyser.fftSize = 2048;
-    //const canvasCtx = canvas.getContext('2d');
     let bufferLength = analyser.frequencyBinCount;
     let dataArray = new Uint8Array(bufferLength);
-
-    requestAnimationFrame(drawFrequency.bind(this, analyser));
     analyser.getByteFrequencyData(dataArray);
+
+    animationFrameId = requestAnimationFrame(drawFrequency.bind(this, analyser));
 
     canvasCtx.fillStyle = 'rgb(0, 0, 0)';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
@@ -212,7 +214,7 @@ function drawOsciloscope(analyser) {
     let bufferLength = analyser.frequencyBinCount;
     let dataArray = new Uint8Array(bufferLength);
 
-    requestAnimationFrame(drawOsciloscope.bind(this,analyser));
+    animationFrameId = requestAnimationFrame(drawOsciloscope.bind(this,analyser));
     analyser.getByteTimeDomainData(dataArray);
   
     canvasCtx.fillStyle = "rgb(255, 255, 255)";
