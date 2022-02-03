@@ -1,7 +1,7 @@
 - Frequency domain 2d (done)
-- Frequency domain rectangles 3d
+- Frequency domain rectangles 3d (done)
 	square from where 'towers' raise, each one a frequency range, each color depending on the intensity
-- Frequency domain mesh 3d
+- Frequency domain terrain 3d 
 	same motif than the previous one, but we define the height of some points, and create triangles between them with degrade in the color
 - Frequency domain dot circle
 	each dot represents a frequency range and each dot's distance and color to the center the intensity of the range.
@@ -10,3 +10,4 @@
 - Guitar Hero Playable
 - https://www.youtube.com/watch?v=tUqSUiSolvQ
 - Random color dots appearing in the screen.
+
