@@ -17,5 +17,7 @@ canvas{
 }
 
 .invisible{
-    visibility: collapse;
+    visibility: hidden;
+    border-collapse: collapse;
+    /*display: none;*/
 }

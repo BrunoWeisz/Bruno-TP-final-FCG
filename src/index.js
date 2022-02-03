@@ -1,9 +1,13 @@
 import * as THREE from 'https://cdn.skypack.dev/three'
-//import { Object3D } from 'three';
-//import Queue from './fixedQueue'
-//import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js'
+
 const canvas = document.getElementById("visualization");
 const canvasCtx = canvas.getContext('2d');
+const canvas2 = document.getElementById("visualization-three");
+/*
+const canvas = document.createElement("canvas");
+const canvasCtx = canvas.getContext('2d');
+const canvas2 = document.createElement("canvas");
+*/
 let animationFrameId;
 
 const Queue = function(size){
@@ -33,9 +37,32 @@ const Visualization = (function(){
         "frequency-3d": draw3dFrequency
     }
 
+    function toThree(){
+        canvas.classList.remove("visible");
+        canvas.classList.add("invisible");
+        canvas2.classList.remove("invisible");
+        canvas2.classList.add("visible");
+        
+    }
+
+    function outOfThree(){
+        canvas2.classList.remove("visible");
+        canvas2.classList.add("invisible");
+        canvas.classList.remove("invisible");
+        canvas.classList.add("visible");      
+    }
+
+    const canvasOperation = {
+        "frequency-1": outOfThree,
+        "osciloscope-1": outOfThree,
+        "growing-circle": toThree,
+        "frequency-3d": toThree
+    }
+
+
     const visualize = function(aVisualizationName, anAnalizer){
-        //canvasCtx.restore();
         cancelAnimationFrame(animationFrameId);
+        canvasOperation[aVisualizationName]();
         visualizations[aVisualizationName](anAnalizer);
     }
 
@@ -77,6 +104,10 @@ const EventHandler = (function(){
         loadElement.parentElement.removeChild(loadElement);
     }
 
+    function addCanvas(){
+        document.body.appendChild(canvas);
+    }
+
     const addSelector = function(){
         const selector = document.querySelector("#selector");
         selector.classList.toggle("visible");
@@ -95,6 +126,7 @@ const EventHandler = (function(){
 
         removeLoadFile();
         addSelector();
+        addCanvas();
     
         AudioManager.setUpAudio(audioEl);
     }
@@ -111,6 +143,7 @@ const EventHandler = (function(){
 
 EventHandler.setLoadFile();
 
+
 function drawGrowingCircle(analyser){
 
     console.log("started circle");
@@ -121,11 +154,11 @@ function drawGrowingCircle(analyser){
 
     //-----------------------------//
     
-    //const renderer = new THREE.WebGLRenderer({canvas: canvas});
-    const renderer = new THREE.WebGLRenderer(); 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    console.log(renderer.domElement.setAttribute('style', ''));
-    document.body.appendChild( renderer.domElement );
+    const renderer = new THREE.WebGLRenderer({canvas: canvas2});
+    //const renderer = new THREE.WebGLRenderer(); 
+    //renderer.setSize(window.innerWidth, window.innerHeight);
+    //console.log(renderer.domElement.setAttribute('style', ''));
+    //document.body.appendChild( renderer.domElement );
     
     const camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
     const scene = new THREE.Scene();
@@ -178,6 +211,7 @@ function drawGrowingCircle(analyser){
     };
 }
 
+
 function draw3dFrequency(analyser){
     draw3dFrequencyWithSize(analyser, 16, 16);
 }
@@ -192,11 +226,11 @@ function draw3dFrequencyWithSize(analyser, hor, ver){
 
     //-----------------------------//
     
-    //const renderer = new THREE.WebGLRenderer({canvas: canvas});
-    const renderer = new THREE.WebGLRenderer(); 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    console.log(renderer.domElement.setAttribute('style', ''));
-    document.body.appendChild( renderer.domElement );
+    const renderer = new THREE.WebGLRenderer({canvas: canvas2});
+    //const renderer = new THREE.WebGLRenderer(); 
+    //renderer.setSize(window.innerWidth, window.innerHeight);
+    //console.log(renderer.domElement.setAttribute('style', ''));
+    //document.body.appendChild( renderer.domElement );
     
     const camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
     const scene = new THREE.Scene();
@@ -245,7 +279,6 @@ function draw3dFrequencyWithSize(analyser, hor, ver){
     function render(time) {
         adaptSize();
         analyser.getByteFrequencyData(dataArray);
-        //console.log(dataArray);
         
         for(let i = 0; i < hor; i++ ){
             for(let j = 0; j < ver; j++ ){
@@ -297,7 +330,7 @@ function drawFrequency(analyser){
 
         barHeight = dataArray[i]/2;
         
-        canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+        canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ','+ (barHeight+100)+',50)';
         canvasCtx.fillRect(x,canvas.height-barHeight/2,barWidth,barHeight);
 
         x += barWidth + 1;
