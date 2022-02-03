@@ -1,4 +1,5 @@
 import * as THREE from 'https://cdn.skypack.dev/three'
+//import { Object3D } from 'three';
 //import Queue from './fixedQueue'
 //import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js'
 const canvas = document.getElementById("visualization");
@@ -28,7 +29,8 @@ const Visualization = (function(){
     const visualizations = {
         "frequency-1": drawFrequency,
         "osciloscope-1": drawOsciloscope,
-        "growing-circle": drawGrowingCircle 
+        "growing-circle": drawGrowingCircle,
+        "frequency-3d": draw3dFrequency
     }
 
     const visualize = function(aVisualizationName, anAnalizer){
@@ -117,7 +119,6 @@ function drawGrowingCircle(analyser){
     let near = .1;
     let far = 100;
 
-
     //-----------------------------//
     
     //const renderer = new THREE.WebGLRenderer({canvas: canvas});
@@ -139,7 +140,7 @@ function drawGrowingCircle(analyser){
     sphereMesh.position.set(0,0,-2);
     scene.add(sphereMesh);
 
-    let delayedData = Queue(10);
+    let delayedData = Queue(4);
 
     function render(time) {
         adaptSize();
@@ -151,10 +152,109 @@ function drawGrowingCircle(analyser){
 
         let scale = computeScale(dataArray);
         delayedData.add(scale);
-        let ss = delayedData.mean();
+        let suavizedScale = delayedData.mean();
+
+        const actualScale = suavizedScale;
         
-        sphereMesh.scale.set(ss,ss,ss);
-        sphereMesh.material.color.setRGB(ss,0,0);
+        sphereMesh.scale.set(actualScale,actualScale,actualScale);
+        //sphereMesh.material.color.setRGB(suavizedScale,0,0);
+        renderer.render( scene, camera );
+        animationFrameId = requestAnimationFrame(render.bind(this, analyser));
+    };
+    animationFrameId = requestAnimationFrame(render.bind(this, analyser));
+
+    function computeScale(data){
+        return data.reduce((pv,cv) => cv/data.length + pv)/150;
+    }
+
+    function adaptSize(){
+        //console.log("resizing");
+        if (window.innerHeight != canvas.clientHeight || window.innerWidth != canvas.clientWidth){
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            const pr = window.devicePixelRatio;
+            renderer.setSize(canvas.clientWidth * pr | 0, canvas.clientHeight * pr | 0, false);
+            camera.updateProjectionMatrix();
+        }
+    };
+}
+
+function draw3dFrequency(analyser){
+    draw3dFrequencyWithSize(analyser, 16, 16);
+}
+
+function draw3dFrequencyWithSize(analyser, hor, ver){
+
+    console.log("started 3d frequency");
+    let fov = 75;
+    let ratio = canvas.clientWidth / canvas.clientHeight;
+    let near = .1;
+    let far = 100;
+
+    //-----------------------------//
+    
+    //const renderer = new THREE.WebGLRenderer({canvas: canvas});
+    const renderer = new THREE.WebGLRenderer(); 
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    console.log(renderer.domElement.setAttribute('style', ''));
+    document.body.appendChild( renderer.domElement );
+    
+    const camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
+    const scene = new THREE.Scene();
+    const light = new THREE.AmbientLight(0xAAAAAA, .7);
+    scene.add(light);
+    //light.position.set(0,10,0);
+    //light.target.position.set(0,0,0);
+    camera.position.set(0,7,15);
+    camera.lookAt(0,0,0);
+
+    //const table = new THREE.Object3D();
+    //scene.add(table);
+
+    const bar = new THREE.BoxGeometry(1,1,1);
+
+    const board = new Array(hor);
+    for(const i of Array(hor).keys()){
+        board[i] = new Array(ver);
+    }
+
+    for(let i = -hor/2; i < hor/2; i++ ){
+        for(let j = -ver/2; j < ver/2; j++ ){
+            const basicMaterial = new THREE.MeshPhongMaterial();
+            const barMesh = new THREE.Mesh(bar, basicMaterial);
+            barMesh.position.set(i,0,j);
+            board[i+hor/2][j+ver/2] = barMesh;
+            scene.add(barMesh);
+            
+            //console.log(`Bar[${i+hor/2}][${j+ver/2}]: ${barMesh.position.x},${barMesh.position.z}`);
+        }
+    }
+
+    for(let i = 0; i < hor; i++ ){
+        for(let j = 0; j < ver; j++ ){
+            board[i][j].material.color.setRGB(i/hor,0,j/ver);
+            //board[i][j].material.emissive.setRGB(i*256/hor+10,10,j*256/ver+10);
+        }
+    }
+    //console.log(board.flat().map((pad) => pad.material.color));
+    //console.log(table);
+    
+    analyser.fftSize = hor*ver*2;
+    let bufferLength = analyser.frequencyBinCount;
+    let dataArray = new Uint8Array(bufferLength);
+
+    function render(time) {
+        adaptSize();
+        analyser.getByteFrequencyData(dataArray);
+        //console.log(dataArray);
+        
+        for(let i = 0; i < hor; i++ ){
+            for(let j = 0; j < ver; j++ ){
+                const arrayIndex = i*ver+j;
+                board[i][j].scale.set(1, Math.max(dataArray[arrayIndex]/20,1), 1);
+                board[i][j].material.color.setRGB(i/hor,dataArray[arrayIndex]/255,j/ver);
+            }
+        }
+        
         renderer.render( scene, camera );
         animationFrameId = requestAnimationFrame(render.bind(this, analyser));
     };
