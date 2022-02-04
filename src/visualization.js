@@ -1,4 +1,5 @@
-import {draw3dFrequency, drawOsciloscope, drawFrequency, drawGrowingCircle, drawHeightmapFrequency} from './visualizationFunctions.js';
+import {draw3dFrequency, drawOsciloscope, drawFrequency, drawGrowingCircle} from './visualizationFunctions.js';
+import {drawHeightmapFrequency} from './heightMap.js';
 
 const Visualization = (function(){
 
@@ -29,7 +30,8 @@ const Visualization = (function(){
         "frequency-1": outOfThree,
         "osciloscope-1": outOfThree,
         "growing-circle": toThree,
-        "frequency-3d": toThree
+        "frequency-3d": toThree,
+        "frequency-heightmap": toThree
     }
 
 
