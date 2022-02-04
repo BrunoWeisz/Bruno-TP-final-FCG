@@ -12,7 +12,7 @@ function drawTimeFrequencyWithWidth(analyser, wid){
     let fov = 75;
     let ratio = canvas.clientWidth / canvas.clientHeight;
     let near = .1;
-    let far = 100;
+    let far = 300;
     
     const renderer = new THREE.WebGLRenderer({canvas: canvas2});
     const camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
@@ -126,10 +126,10 @@ function drawTimeFrequencyWithWidth(analyser, wid){
         //heightmap.geometry.attributes.color.array[bufferIndex] = computeColor(dataArray[arrayIndex]);
 
         //--------------------------------//
-        console.log(heightmap);
+        //console.log(heightmap);
         // console.log("posicion:", camera.position);
         // console.log("mirando a:", camera);
-        // console.log("posicion de las filas:", advanced);
+         console.log("posicion de las filas:", advanced);
         //--------------------------------//
 
         heightmap.geometry.setIndex(index);
@@ -137,8 +137,8 @@ function drawTimeFrequencyWithWidth(analyser, wid){
         heightmap.geometry.attributes.color.needsUpdate = true;
         heightmap.geometry.computeVertexNormals();
         
-        camera.position.z = advanced + 16;
-        camera.lookAt(frecWid/2,0,advanced);
+        camera.position.z = advanced + 16 + 50;
+        camera.lookAt(frecWid/2,0,advanced) + 50;
 
         renderer.render( scene, camera );
         animationFrameId = requestAnimationFrame(render);
@@ -147,7 +147,7 @@ function drawTimeFrequencyWithWidth(analyser, wid){
     animationFrameId = requestAnimationFrame(render);
 
     function computeHeight(data){
-        return data/20;
+        return data/5;
     }
 
     function computeColor(data){

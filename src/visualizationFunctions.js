@@ -65,7 +65,7 @@ function drawGrowingCircle(analyser){
 
 
 function draw3dFrequency(analyser){
-    draw3dFrequencyWithSize(analyser, 16, 16);
+    draw3dFrequencyWithSize(analyser, 32, 32);
 }
 
 function draw3dFrequencyWithSize(analyser, hor, ver){
@@ -85,7 +85,7 @@ function draw3dFrequencyWithSize(analyser, hor, ver){
     scene.add(light);
     //light.position.set(0,10,0);
     //light.target.position.set(0,0,0);
-    camera.position.set(0,7,15);
+    camera.position.set(0,14,30);
     camera.lookAt(0,0,0);
 
     //const table = new THREE.Object3D();
