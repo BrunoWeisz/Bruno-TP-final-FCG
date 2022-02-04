@@ -85,8 +85,8 @@ function drawHeightmapFrequencyWithSize(analyser, hor, ver){
             for(let j = 0; j < ver; j++ ){
                 const arrayIndex = i*ver+j;
                 const bufferIndex = (i*ver+j)*3+1; 
-                vertices[bufferIndex]/*[1]*/ = computeHeight(dataArray[arrayIndex]);
-                colors[bufferIndex]/*[1]*/ = computeColor(dataArray[arrayIndex]);
+                vertices[bufferIndex] = computeHeight(dataArray[arrayIndex]);
+                colors[bufferIndex] = computeColor(dataArray[arrayIndex]);
                 //heightmap.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices.flat()), 3));
                 //heightmap.geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors.flat()), 3));
                 heightmap.geometry.attributes.position.array[bufferIndex] = computeHeight(dataArray[arrayIndex]);
