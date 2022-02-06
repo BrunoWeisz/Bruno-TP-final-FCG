@@ -33,7 +33,7 @@ Badge.prototype.toHeightAndColor = function(heightData, currentZPosition){
 
 Badge.prototype.addInitialRow = function(currentZPosition, firstHeightData){
 
-    console.log("initial row:", currentZPosition);
+    // console.log("initial row:", currentZPosition);
 
     let newVertexRow;
     let newColorRow;
@@ -47,7 +47,7 @@ Badge.prototype.addInitialRow = function(currentZPosition, firstHeightData){
 
 Badge.prototype.addRow = function(heightData, currentZPosition){
     
-    console.log("adding row:", currentZPosition);
+    // console.log("adding row:", currentZPosition);
 
     let newVertexRow;
     let newColorRow;
@@ -84,8 +84,8 @@ Badge.prototype.addRow = function(heightData, currentZPosition){
     this.historyHeightData.push(heightData);
 }
 
-Badge.prototype.lastHeigthData = function(){
-    return this.historyHeightData[this.historyHeightData.length - 1];
+Badge.prototype.lastHeigthData = function(n){
+    return this.historyHeightData[this.historyHeightData.length - n];
 }
 
 Badge.prototype.addToScene = function(aScene){
@@ -117,6 +117,10 @@ Badge.prototype.computeMountainColor = function(data){
 
     return finalColor.map(col => col/255);
     
+}
+
+Badge.prototype.delete = function(){
+
 }
 
 export {Badge};

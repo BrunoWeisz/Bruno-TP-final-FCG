@@ -10,7 +10,7 @@ const timeFrequencyDrawer = (function(){
 
     function draw(analyser){
         analyserNode = analyser;
-        drawTimeFrequencyWithWidth(256);
+        drawTimeFrequencyWithWidth(512);
     }
 
     function setThreeJS(){
@@ -18,19 +18,20 @@ const timeFrequencyDrawer = (function(){
         let ratio = canvas.clientWidth / canvas.clientHeight;
         let near = .1;
         let far = 300;
-        cameraDistance = 70;
-        cameraHeigth = 50;
-        cameraXPosition = frecWid / 2;
+        cameraDistance = 150;
+        cameraHeigth = 60;
+        cameraXPosition = frecWid/2;
         
         renderer = new THREE.WebGLRenderer({canvas: canvas2});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         scene = new THREE.Scene();
-        light = new THREE.AmbientLight(0xFFFFFF, 1);
+        light = new THREE.AmbientLight(0xFFFFFF, 0xFFFFFF, 1);
         scene.add(light);
-        //light.position.set(0,10,0);
-        //light.target.position.set(0,0,0);
+        // scene.add(light.target);
+        light.position.set(cameraXPosition,cameraHeigth*2,0);
+        // light.target.position.set(cameraXPosition,0,0);
         camera.position.set(cameraXPosition,cameraHeigth,cameraDistance);
-        camera.lookAt(cameraXPosition,0,0);
+        camera.lookAt(0,0,0);
     }
 
     function drawTimeFrequencyWithWidth(_wid){
@@ -59,16 +60,22 @@ const timeFrequencyDrawer = (function(){
         adaptSize();
         analyserNode.getByteFrequencyData(dataArray);
         badgeManager.addRow(dataArray);
+    
 
         //--------------------------------//
-        // console.log(scene);
+        // console.log(badgeManager.currentZPosition);
+        console.log(scene);
         // console.log("camera position: ", camera.position);
         // console.log("looking at: ", camera);
         // console.log("current row position:", advanced);
         //--------------------------------//
         
-        camera.position.z = advanced + cameraDistance;
-        camera.lookAt(cameraXPosition,0,advanced);
+        
+        light.position.set(cameraXPosition,cameraHeigth,advanced);
+        // light.target.position.set(cameraXPosition,0,advanced);
+
+        camera.position.set(cameraXPosition,cameraHeigth,cameraDistance+advanced);
+        camera.lookAt(cameraXPosition,10,advanced);
 
         renderer.render( scene, camera );
         advanced += pace;

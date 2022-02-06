@@ -80,7 +80,7 @@ const heightMapFrequencyDrawer = (function(){
         heightmap.material.side = THREE.DoubleSide;
     
         scene.add(heightmap);
-        console.log(index);
+        // console.log(index);
         
         analyserNode.fftSize = hor*ver*2*2;
         let bufferLength = analyserNode.frequencyBinCount;

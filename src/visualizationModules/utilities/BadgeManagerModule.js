@@ -7,12 +7,17 @@ function BadgeManager(initialZPosition, pace, frecWid, scene){
     this.frecWid = frecWid;
 
     this.badges = [];
-    this.badgeMaxLength = 10;
+    this.badgeMaxLength = 20;
+    this.badgeMaxPersistence = 4;
 };
 
 BadgeManager.prototype.addBadge = function(newBadge){
     this.badges.push(newBadge);
     newBadge.addToScene(this.scene);
+    if (this.badges.length > 4){
+        this.badges[0].delete();
+        this.badges.shift;
+    }
 }
 
 BadgeManager.prototype.beginBadges = function(){
@@ -32,10 +37,11 @@ BadgeManager.prototype.addRow = function(heightData){
     if (currentBadge.length() < this.badgeMaxLength){
         currentBadge.addRow(heightData, this.currentZPosition);
     } else {
-        let repeatingData = currentBadge.lastHeigthData();
+        let repeatingData1 = currentBadge.lastHeigthData(1);
         let newBadge = new Badge(this.frecWid);
-        newBadge.addInitialRow(this.currentZPosition - this.pace, repeatingData);
+        newBadge.addInitialRow(this.currentZPosition - 1*this.pace, repeatingData1);
         newBadge.addRow(heightData, this.currentZPosition);
+        currentBadge.addRow(heightData, this.currentZPosition);
         this.addBadge(newBadge);
     }
     this.currentZPosition += this.pace;
