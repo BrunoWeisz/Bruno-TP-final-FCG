@@ -1,5 +1,5 @@
 import * as THREE from 'https://cdn.skypack.dev/three'
-import Queue from './fixedQueue.js'
+import Queue from '../fixedQueue.js'
 
 function drawGrowingCircle(analyser){
 

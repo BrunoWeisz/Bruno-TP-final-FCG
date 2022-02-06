@@ -1,7 +1,7 @@
-import {drawOsciloscope, drawFrequency, drawGrowingCircle} from './visualizationFunctions.js';
-import { timeFrequencyDrawer } from './timeFrequencyModule.js';
-import {heightMapFrequencyDrawer} from './heightMapModule.js';
-import {frequency3DDrawer} from './3dFrequencyModule.js';
+import {drawOsciloscope, drawFrequency, drawGrowingCircle} from './visualizationModules/visualizationFunctions.js';
+import { timeFrequencyDrawer } from './visualizationModules/timeFrequencyModule.js';
+import {heightMapFrequencyDrawer} from './visualizationModules/heightMapModule.js';
+import {frequency3DDrawer} from './visualizationModules/3dFrequencyModule.js';
 
 
 const Visualization = (function(){
