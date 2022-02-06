@@ -1,6 +1,7 @@
-import {draw3dFrequency, drawOsciloscope, drawFrequency, drawGrowingCircle} from './visualizationFunctions.js';
-import {drawHeightmapFrequency} from './heightMap.js';
-import { drawTimeFrequency } from './timeFrequency.js';
+import {drawOsciloscope, drawFrequency, drawGrowingCircle} from './visualizationFunctions.js';
+import { timeFrequencyDrawer } from './timeFrequencyModule.js';
+import {heightMapFrequencyDrawer} from './heightMapModule.js';
+import {frequency3DDrawer} from './3dFrequencyModule.js';
 
 
 const Visualization = (function(){
@@ -9,9 +10,9 @@ const Visualization = (function(){
         "frequency-1": drawFrequency,
         "osciloscope-1": drawOsciloscope,
         "growing-circle": drawGrowingCircle,
-        "frequency-3d": draw3dFrequency,
-        "frequency-heightmap": drawHeightmapFrequency,
-        "time-frequency": drawTimeFrequency
+        "frequency-3d": frequency3DDrawer.draw,
+        "frequency-heightmap": heightMapFrequencyDrawer.draw,
+        "time-frequency": timeFrequencyDrawer.draw
     }
 
     function toThree(){
