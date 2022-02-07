@@ -38,7 +38,7 @@ const timeFrequencyDrawer = (function(){
         console.log("started time frequency");
 
         wid = _wid;
-        frecWid = wid/2;
+        frecWid = Math.floor(wid/3);
 
         setThreeJS();
         
@@ -48,6 +48,7 @@ const timeFrequencyDrawer = (function(){
         badgeManager = new BadgeManager(advanced, pace, frecWid, scene);
 
         analyserNode.fftSize = wid;
+        // analyserNode.smoothingTimeConstant = 0.8;
         let bufferLength = analyserNode.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
 
@@ -64,7 +65,7 @@ const timeFrequencyDrawer = (function(){
 
         //--------------------------------//
         // console.log(badgeManager.currentZPosition);
-        console.log(scene);
+        // console.log(scene);
         // console.log("camera position: ", camera.position);
         // console.log("looking at: ", camera);
         // console.log("current row position:", advanced);
@@ -84,10 +85,23 @@ const timeFrequencyDrawer = (function(){
     };
 
     function adaptSize(){
-        //console.log("resizing");
+        
         if (window.innerHeight != canvas.clientHeight || window.innerWidth != canvas.clientWidth){
+            console.log("resizing");
+            canvas2.style.width = "100%";
+            canvas2.style.height = "100%";
+
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            const pr = window.devicePixelRatio;
+            const pr = window.devicePixelRatio || 1;
+            canvas.width = canvas.clientWidth * pr;
+            canvas.height = canvas.clientHeight * pr;
+
+            const width = canvas.width / pr;
+            const height = canvas.height / pr;
+
+            canvas.style.width = width + 'px';
+            canvas.style.heigth = height + 'px';
+
             renderer.setSize(canvas.clientWidth * pr | 0, canvas.clientHeight * pr | 0, false);
             camera.updateProjectionMatrix();
         }
