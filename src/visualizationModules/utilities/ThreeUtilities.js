@@ -5,12 +5,6 @@ const ThreeUtilities = (function(){
     function adaptSize(cv,cam,renderer){
         cv.style.width = "100%";
         cv.style.height = "100%";
-        // console.log("---------------");
-        // console.log(cv.width);
-        // console.log(cv.clientWidth);
-        // console.log(cv.height);
-        // console.log(cv.clientHeight);
-        // console.log("---------------");
         if (cv.width !== cv.clientWidth || cv.height !== cv.clientHeight){
 
             console.log("Resizing...");

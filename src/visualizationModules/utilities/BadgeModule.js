@@ -8,7 +8,7 @@ function Badge(frecWid){
     this.index = [];
     this.plane = new THREE.BufferGeometry();
     this.plane.dynamic = true;
-    this.phongMaterial = new THREE.MeshBasicMaterial({
+    this.phongMaterial = new THREE.MeshPhongMaterial({
         vertexColors: true
     });
     this.heightmap = new THREE.Mesh(this.plane, this.phongMaterial);
@@ -20,8 +20,6 @@ Badge.prototype.length = function(){
 }
 
 Badge.prototype.toHeightAndColor = function(heightData, currentZPosition){
-    //let newVertexRow = heightData.map((height, index) => {return [index, this.computeHeight(height), this.currentZPosition]});
-    //let newColorRow = heightData.map(height => {return this.computeMountainColor(height)});
     let newVertexRow = [];
     let newColorRow = [];
     for(let i = 0; i < this.frecWid; i++ ){
@@ -31,29 +29,23 @@ Badge.prototype.toHeightAndColor = function(heightData, currentZPosition){
     return [newVertexRow, newColorRow];
 }
 
-Badge.prototype.addInitialRow = function(currentZPosition, firstHeightData){
-
-    // console.log("initial row:", currentZPosition);
-
-    let newVertexRow;
-    let newColorRow;
-    [newVertexRow, newColorRow] = this.toHeightAndColor(firstHeightData, currentZPosition);
-    this.vertices.push(newVertexRow);
-    this.colors.push(newColorRow);
-    this.historyHeightData.push(firstHeightData);
-}
-
-// POSSIBLE SOLUTION: PROBLEM WITH INDEXES //
-
-Badge.prototype.addRow = function(heightData, currentZPosition){
-    
-    // console.log("adding row:", currentZPosition);
-
+Badge.prototype.addRowToPositionAndColor = function(heightData, currentZPosition){
     let newVertexRow;
     let newColorRow;
     [newVertexRow, newColorRow] = this.toHeightAndColor(heightData, currentZPosition);
     this.vertices.push(newVertexRow);
     this.colors.push(newColorRow);
+}
+
+Badge.prototype.addInitialRow = function(currentZPosition, firstHeightData){
+
+    this.addRowToPositionAndColor(firstHeightData,currentZPosition);
+    this.historyHeightData.push(firstHeightData);
+}
+
+Badge.prototype.addRow = function(heightData, currentZPosition){
+    
+    this.addRowToPositionAndColor(heightData,currentZPosition);
 
     let currentIndex = this.vertices.length-2;
 
@@ -79,7 +71,9 @@ Badge.prototype.addRow = function(heightData, currentZPosition){
     this.heightmap.geometry.setIndex(this.index);
     this.heightmap.geometry.attributes.position.needsUpdate = true;
     this.heightmap.geometry.attributes.color.needsUpdate = true;
+    this.heightmap.geometry.deleteAttribute('normal');
     this.heightmap.geometry.computeVertexNormals();
+    this.heightmap.geometry.normalizeNormals();
 
     this.historyHeightData.push(heightData);
 }
