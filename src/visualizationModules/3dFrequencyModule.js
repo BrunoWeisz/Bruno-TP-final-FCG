@@ -1,4 +1,5 @@
 import * as THREE from 'https://cdn.skypack.dev/three';
+import { ThreeUtilities } from './utilities/ThreeUtilities.js';
 
 const frequency3DDrawer = (function(){
 
@@ -90,13 +91,7 @@ const frequency3DDrawer = (function(){
     }
 
     function adaptSize(){
-        //console.log("resizing");
-        if (window.innerHeight != canvas.clientHeight || window.innerWidth != canvas.clientWidth){
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            const pr = window.devicePixelRatio;
-            renderer.setSize(canvas.clientWidth * pr | 0, canvas.clientHeight * pr | 0, false);
-            camera.updateProjectionMatrix();
-        }
+        ThreeUtilities.adaptSize(canvas2,camera,renderer);
     };
 
     return {

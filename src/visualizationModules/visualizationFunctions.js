@@ -1,5 +1,6 @@
-import * as THREE from 'https://cdn.skypack.dev/three'
-import Queue from './utilities/fixedQueue.js'
+import * as THREE from 'https://cdn.skypack.dev/three';
+import Queue from './utilities/fixedQueue.js';
+import { ThreeUtilities } from './utilities/ThreeUtilities.js';
 
 function drawGrowingCircle(analyser){
 
@@ -40,7 +41,6 @@ function drawGrowingCircle(analyser){
         let suavizedScale = delayedData.mean();
 
         const actualScale = scale;
-        console.log(actualScale)
         sphereMesh.scale.set(actualScale,actualScale,actualScale);
         sphereMesh.material.color.setRGB(actualScale/3,.8,.07);
         renderer.render( scene, camera );
@@ -53,13 +53,7 @@ function drawGrowingCircle(analyser){
     }
 
     function adaptSize(){
-        console.log("resizing");
-        if (window.innerHeight != canvas.clientHeight || window.innerWidth != canvas.clientWidth){
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            const pr = window.devicePixelRatio;
-            renderer.setSize(canvas.clientWidth * pr | 0, canvas.clientHeight * pr | 0, false);
-            camera.updateProjectionMatrix();
-        }
+        ThreeUtilities.adaptSize(canvas2,camera,renderer);
     };
 }
 

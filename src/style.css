@@ -8,7 +8,7 @@ html,body{
 }
 
 *{
-    z-index: 900;
+    z-index: 1;
 }
 
 canvas{
@@ -18,8 +18,7 @@ canvas{
     top: 0;
     height: 100%;
     width: 100%;
-    z-index: 850;
-    /* border: 1px solid black; */
+    z-index: -1;
 }
 
 .visible{

@@ -1,5 +1,6 @@
 import * as THREE from 'https://cdn.skypack.dev/three';
 import { BadgeManager } from './utilities/BadgeManagerModule.js';
+import { ThreeUtilities } from './utilities/ThreeUtilities.js';
 
 
 const timeFrequencyDrawer = (function(){
@@ -85,26 +86,7 @@ const timeFrequencyDrawer = (function(){
     };
 
     function adaptSize(){
-        
-        if (window.innerHeight != canvas.clientHeight || window.innerWidth != canvas.clientWidth){
-            console.log("resizing");
-            canvas2.style.width = "100%";
-            canvas2.style.height = "100%";
-
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            const pr = window.devicePixelRatio || 1;
-            canvas.width = canvas.clientWidth * pr;
-            canvas.height = canvas.clientHeight * pr;
-
-            const width = canvas.width / pr;
-            const height = canvas.height / pr;
-
-            canvas.style.width = width + 'px';
-            canvas.style.heigth = height + 'px';
-
-            renderer.setSize(canvas.clientWidth * pr | 0, canvas.clientHeight * pr | 0, false);
-            camera.updateProjectionMatrix();
-        }
+        ThreeUtilities.adaptSize(canvas2,camera,renderer);
     };
 
     
