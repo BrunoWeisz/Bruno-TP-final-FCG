@@ -8,8 +8,14 @@ const ThreeUtilities = (function(){
             return settings.divissions/2;
         }
 
+        function cameraDistance3dFrequency(settings){
+            let div = settings.divissions;
+            return [div/2+10,div+10];
+        }
+
         return {
-            cameraDistance2dFrequency
+            cameraDistance2dFrequency,
+            cameraDistance3dFrequency
         }
     })();
 

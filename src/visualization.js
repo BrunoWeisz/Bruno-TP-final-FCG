@@ -28,12 +28,15 @@ const Visualization = (function(){
     function to2DFrequency(){
         EventHandler.VisualizationEvents.set2DFrequency();
     }
+    function to3DFrequency(){
+        EventHandler.VisualizationEvents.set3DFrequency();
+    }
 
     const visualizationSetup = {
         "frequency-1": to2DFrequency,
         // "osciloscope-1": toThree,
         "growing-circle": toThree,
-        "frequency-3d": toThree,
+        "frequency-3d": to3DFrequency,
         "frequency-heightmap": toThree,
         "time-frequency": toThree
     }
@@ -41,11 +44,13 @@ const Visualization = (function(){
     const defaultVisualizationSettings = {
         "frequency-1": {
             divissions: 1024
+        },
+        "frequency-3d": {
+            divissions: 32
         }
     }
 
     let currentVisualizationSettings = Object.assign({}, defaultVisualizationSettings);
-
 
     const visualize = function(aVisualizationName, anAnalizer){
         cancelAnimationFrame(animationFrameId);

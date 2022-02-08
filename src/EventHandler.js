@@ -5,7 +5,11 @@ const EventHandler = (function(){
 
     const VisualizationEvents = (function(){
 
+        let currentSettingsBar = document.createElement("div");
+        document.body.appendChild(currentSettingsBar);
+
         function createControlPannel(){
+            document.body.removeChild(currentSettingsBar);
             let controlsDiv = document.createElement("div");
             controlsDiv.classList.add("controls-2d");
             document.body.appendChild(controlsDiv);
@@ -31,13 +35,26 @@ const EventHandler = (function(){
             let widthList = document.createElement("ul");
             widthList.classList.add("width-list");
             div.appendChild(widthList);
+            currentSettingsBar = div;
             for (let i = 0; i < 6; i++){
                 addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
             }
         }
 
+        function set3DFrequency(){
+            let div = createControlPannel();
+            let widthList = document.createElement("ul");
+            widthList.classList.add("width-list");
+            div.appendChild(widthList);
+            currentSettingsBar = div;
+            for (let i = 0; i < 4; i++){
+                addSizeControllerToList(widthList, `${2**(3+i)} x ${2**(3+i)}`, 2**(3+i), changeSize);
+            }
+        }
+
         return {
-            set2DFrequency
+            set2DFrequency,
+            set3DFrequency
         }
 
     })();

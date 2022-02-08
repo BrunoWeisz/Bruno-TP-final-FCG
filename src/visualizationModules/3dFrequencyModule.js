@@ -3,11 +3,13 @@ import { ThreeUtilities } from './utilities/ThreeUtilities.js';
 
 const frequency3DDrawer = (function(){
 
-    let camera, renderer, scene, light, analyserNode, dataArray, hor, ver, board;
+    let camera, renderer, scene, light, analyserNode, dataArray, hor, ver, board, visualizationSettings;
 
-    function draw(analyser){
+    function draw(analyser, vSettings){
+        visualizationSettings = vSettings;
         analyserNode = analyser;
-        draw3dFrequencyWithSize(32, 32);
+        let divissionsPerSide = visualizationSettings.divissions;
+        draw3dFrequencyWithSize(divissionsPerSide, divissionsPerSide);
     }
 
     function draw3dFrequencyWithSize(_hor, _ver){
@@ -19,8 +21,12 @@ const frequency3DDrawer = (function(){
         let fov = 75;
         let ratio = canvas.clientWidth / canvas.clientHeight;
         let near = .1;
-        let far = 100;
-    
+        
+        console.log(visualizationSettings);
+        let cameraY, cameraZ;
+        [cameraY,cameraZ] = ThreeUtilities.Distance.cameraDistance3dFrequency(visualizationSettings);
+        let far = cameraZ+50;
+
         //-----------------------------//
         
         renderer = new THREE.WebGLRenderer({canvas: canvas});
@@ -30,7 +36,7 @@ const frequency3DDrawer = (function(){
         scene.add(light);
         //light.position.set(0,10,0);
         //light.target.position.set(0,0,0);
-        camera.position.set(0,14,30);
+        camera.position.set(0,cameraY,cameraZ);
         camera.lookAt(0,0,0);
     
         //const table = new THREE.Object3D();
