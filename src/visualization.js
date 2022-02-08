@@ -2,12 +2,13 @@ import {drawOsciloscope, drawFrequency, drawGrowingCircle} from './visualization
 import { timeFrequencyDrawer } from './visualizationModules/timeFrequencyModule.js';
 import {heightMapFrequencyDrawer} from './visualizationModules/heightMapModule.js';
 import {frequency3DDrawer} from './visualizationModules/3dFrequencyModule.js';
+import { DrawFrequency2D } from './visualizationModules/2dFrequencyModule.js';
 
 
 const Visualization = (function(){
 
     const visualizations = {
-        "frequency-1": drawFrequency,
+        "frequency-1": DrawFrequency2D.draw,
         "osciloscope-1": drawOsciloscope,
         "growing-circle": drawGrowingCircle,
         "frequency-3d": frequency3DDrawer.draw,
@@ -31,7 +32,7 @@ const Visualization = (function(){
     }
 
     const canvasOperation = {
-        "frequency-1": outOfThree,
+        "frequency-1": toThree,
         "osciloscope-1": outOfThree,
         "growing-circle": toThree,
         "frequency-3d": toThree,
