@@ -1,15 +1,20 @@
-import {drawOsciloscope, drawFrequency, drawGrowingCircle} from './visualizationModules/visualizationFunctions.js';
+import EventHandler from './EventHandler.js';
+import {drawOsciloscope, drawGrowingCircle} from './visualizationModules/visualizationFunctions.js';
 import { timeFrequencyDrawer } from './visualizationModules/timeFrequencyModule.js';
 import {heightMapFrequencyDrawer} from './visualizationModules/heightMapModule.js';
 import {frequency3DDrawer} from './visualizationModules/3dFrequencyModule.js';
 import { DrawFrequency2D } from './visualizationModules/2dFrequencyModule.js';
+import { Osciloscope } from './visualizationModules/osciloscopeModule.js';
 
 
 const Visualization = (function(){
 
+    let currentVisualizationName;
+    let currentAnalyser;
+
     const visualizations = {
         "frequency-1": DrawFrequency2D.draw,
-        "osciloscope-1": drawOsciloscope,
+        // "osciloscope-1": Osciloscope.draw,
         "growing-circle": drawGrowingCircle,
         "frequency-3d": frequency3DDrawer.draw,
         "frequency-heightmap": heightMapFrequencyDrawer.draw,
@@ -17,38 +22,48 @@ const Visualization = (function(){
     }
 
     function toThree(){
-        canvas.classList.remove("visible");
-        canvas.classList.add("invisible");
-        canvas2.classList.remove("invisible");
-        canvas2.classList.add("visible");
         
     }
 
-    function outOfThree(){
-        canvas2.classList.remove("visible");
-        canvas2.classList.add("invisible");
-        canvas.classList.remove("invisible");
-        canvas.classList.add("visible");      
+    function to2DFrequency(){
+        EventHandler.VisualizationEvents.set2DFrequency();
     }
 
-    const canvasOperation = {
-        "frequency-1": toThree,
-        "osciloscope-1": outOfThree,
+    const visualizationSetup = {
+        "frequency-1": to2DFrequency,
+        // "osciloscope-1": toThree,
         "growing-circle": toThree,
         "frequency-3d": toThree,
         "frequency-heightmap": toThree,
         "time-frequency": toThree
     }
 
+    const defaultVisualizationSettings = {
+        "frequency-1": {
+            divissions: 1024
+        }
+    }
+
+    let currentVisualizationSettings = Object.assign({}, defaultVisualizationSettings);
+
 
     const visualize = function(aVisualizationName, anAnalizer){
         cancelAnimationFrame(animationFrameId);
-        canvasOperation[aVisualizationName]();
-        visualizations[aVisualizationName](anAnalizer);
+        currentVisualizationName = aVisualizationName;
+        currentAnalyser = anAnalizer;
+        visualizationSetup[aVisualizationName]();
+        let settings = currentVisualizationSettings[aVisualizationName];
+        visualizations[aVisualizationName](anAnalizer, settings);
+    }
+
+    function changeDivission(aNewDivission){
+        currentVisualizationSettings[currentVisualizationName].divissions = aNewDivission;
+        visualize(currentVisualizationName, currentAnalyser);
     }
 
     return {
-        visualize
+        visualize,
+        changeDivission
     }
 })();
 

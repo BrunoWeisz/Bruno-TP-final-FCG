@@ -1,6 +1,46 @@
 import AudioManager from './audioManager.js';
+import Visualization from './visualization.js';
 
 const EventHandler = (function(){
+
+    const VisualizationEvents = (function(){
+
+        function createControlPannel(){
+            let controlsDiv = document.createElement("div");
+            controlsDiv.classList.add("controls-2d");
+            document.body.appendChild(controlsDiv);
+            return controlsDiv;
+        }   
+
+        function addSizeControllerToList(aListElement, aTextContent, aValue, aHandler){
+            let e = document.createElement("li");
+            e.textContent = aTextContent;
+            aListElement.appendChild(e);
+            e.addEventListener("click", (ev) => {
+                aHandler(aValue);
+            })
+        }
+
+        function changeSize(aValue){
+            console.log("changing size to ", aValue);
+            Visualization.changeDivission(aValue);
+        }
+
+        function set2DFrequency(){
+            let div = createControlPannel();
+            let widthList = document.createElement("ul");
+            widthList.classList.add("width-list");
+            div.appendChild(widthList);
+            for (let i = 0; i < 6; i++){
+                addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
+            }
+        }
+
+        return {
+            set2DFrequency
+        }
+
+    })();
 
     const removeLoadFile = function(){
         const loadElement = document.querySelector("#loadfile");
@@ -29,7 +69,7 @@ const EventHandler = (function(){
 
         removeLoadFile();
         addSelector();
-        addCanvas();
+        // addCanvas();
     
         AudioManager.setUpAudio(audioEl);
     }
@@ -39,7 +79,8 @@ const EventHandler = (function(){
     }
 
     return {
-        setLoadFile
+        setLoadFile,
+        VisualizationEvents
     }
 })();
 

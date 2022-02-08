@@ -25,7 +25,7 @@ const heightMapFrequencyDrawer = (function(){
     
         //-----------------------------//
         
-        renderer = new THREE.WebGLRenderer({canvas: canvas2});
+        renderer = new THREE.WebGLRenderer({canvas: canvas});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         scene = new THREE.Scene();
         light = new THREE.DirectionalLight(0xFFFFFF, 1);
@@ -79,28 +79,24 @@ const heightMapFrequencyDrawer = (function(){
         });
         heightmap = new THREE.Mesh(plane, basicMaterial);
         heightmap.material.side = THREE.DoubleSide;
-    
         scene.add(heightmap);
-        // console.log(index);
         
         analyserNode.fftSize = hor*ver*2*2;
         let bufferLength = analyserNode.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
-    
-        //renderer.render(scene,camera);
 
         animationFrameId = requestAnimationFrame(render);     
     }
 
     function adaptSize(){
-        ThreeUtilities.adaptSize(canvas2,camera,renderer);
+        ThreeUtilities.adaptSize(canvas,camera,renderer);
     };
 
     function computeHeight(data){
         return data/20;
     }
 
-    function computeColor(data){
+    function computeYColor(data){
         return data/255;
     }
 
@@ -113,9 +109,9 @@ const heightMapFrequencyDrawer = (function(){
                 const arrayIndex = i*ver+j;
                 const bufferIndex = (i*ver+j)*3+1; 
                 vertices[bufferIndex] = computeHeight(dataArray[arrayIndex]);
-                colors[bufferIndex] = computeColor(dataArray[arrayIndex]);
+                colors[bufferIndex] = computeYColor(dataArray[arrayIndex]);
                 heightmap.geometry.attributes.position.array[bufferIndex] = computeHeight(dataArray[arrayIndex]);
-                heightmap.geometry.attributes.color.array[bufferIndex] = computeColor(dataArray[arrayIndex]);
+                heightmap.geometry.attributes.color.array[bufferIndex] = computeYColor(dataArray[arrayIndex]);
             }
         }
         heightmap.geometry.attributes.position.needsUpdate = true;

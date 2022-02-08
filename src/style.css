@@ -30,3 +30,27 @@ canvas{
     border-collapse: collapse;
     /*display: none;*/
 }
+
+.controls-2d{
+    display: flex;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 90%;
+    height: 10%;
+    z-index: 0;
+    background-color: transparent;
+}
+
+.width-list{
+    display: flex;
+    gap: 30px;
+    list-style-type: none;
+}
+
+.width-list li{
+    border: 2px solid white;
+    width: 50px;
+    color: black;
+    background-color: antiquewhite;
+}

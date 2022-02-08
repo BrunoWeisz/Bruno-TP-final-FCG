@@ -3,24 +3,27 @@ import { ThreeUtilities } from './utilities/ThreeUtilities.js';
 
 const DrawFrequency2D = (function(){
 
-    let analyserNode, renderer, camera, scene, light, barCount, bars, dataArray;
+    let analyserNode, renderer, camera, scene, light, barCount, bars, dataArray, visualizationSettings;
 
     function setThreeJs(){
         console.log("started frequency 2d");
         let fov = 100;
-        let ratio = canvas2.clientWidth / canvas2.clientHeight;
+        let ratio = canvas.clientWidth / canvas.clientHeight;
         let near = .1;
-        let far = 500;
+        
 
+        let cameraDistance = ThreeUtilities.Distance.cameraDistance2dFrequency(visualizationSettings);
+        let far = cameraDistance + 20;
+        
         //-----------------------------//
         
-        renderer = new THREE.WebGLRenderer({canvas: canvas2});
+        renderer = new THREE.WebGLRenderer({canvas: canvas});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         scene = new THREE.Scene();
         light = new THREE.AmbientLight(0xBBBBBB, 3);
         scene.add(light);
         //light.position.set(3,3,5);
-        camera.position.set(0,0,450);
+        camera.position.set(0,0,cameraDistance);
         camera.lookAt(0,0,0);
         
     }
@@ -39,12 +42,13 @@ const DrawFrequency2D = (function(){
     }
 
     function adaptSize(){
-        ThreeUtilities.adaptSize(canvas2,camera,renderer);
+        ThreeUtilities.adaptSize(canvas,camera,renderer);
     };
 
-    function draw(analyser){
+    function draw(analyser, vSettings = {divissions: 1024}){
         analyserNode = analyser;
-        barCount = 1024;
+        visualizationSettings = vSettings;
+        barCount = visualizationSettings.divissions;
 
         analyserNode.fftSize = 2*barCount;
         let bufferLength = analyserNode.frequencyBinCount;
@@ -64,25 +68,20 @@ const DrawFrequency2D = (function(){
         analyserNode.getByteFrequencyData(dataArray);
 
         for (let i = 0; i < barCount; i++){
-            // bars[i].geometry.height = computeHeight(dataArray[i]);
-            // bars[i].updateMatrix();
-            bars[i].scale.set(1, Math.max(computeHeight(dataArray[i]),.01), 1);
-            bars[i].material.color.fromArray(computeColor(dataArray[i], i));
+            bars[i].scale.set(1, Math.max(computeScale(dataArray[i]),.01), 1);
+            bars[i].material.color.fromArray(computeColor(dataArray[i], i, barCount));
         }
-
-        // console.log(dataArray);
-        // console.log(bars[barCount/2]);
 
         renderer.render( scene, camera );
         animationFrameId = requestAnimationFrame(render);
     }
 
-    function computeHeight(data){
-        return data*5;
+    function computeScale(data){
+        return ThreeUtilities.Scale.scale2dFrequency(data, visualizationSettings);
     }
 
-    function computeColor(data, ind){
-        return [ind/255,data/255,ind/255];
+    function computeColor(data, ind, maxIndex){
+        return ThreeUtilities.ColorStyle.computeFullColorX(data,ind,barCount);
     }
 
     return {
@@ -93,34 +92,3 @@ const DrawFrequency2D = (function(){
 
 export {DrawFrequency2D};
     
-function drawFrequency(analyser){
-
-    analyser.fftSize = 2048;
-    let bufferLength = analyser.frequencyBinCount;
-    let dataArray = new Uint8Array(bufferLength);
-    analyser.getByteFrequencyData(dataArray);
-
-    animationFrameId = requestAnimationFrame(drawFrequency.bind(this, analyser));
-
-    canvasCtx.fillStyle = 'rgb(0, 0, 0)';
-    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-    let barWidth = (canvas.width / bufferLength) * 2;
-    let barHeight;
-    let x = 0;
-
-    let heightData = [];
-
-    for(let i = 0; i < bufferLength / 2; i++) {
-
-        barHeight = dataArray[i]/2;
-        
-        canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ','+ (barHeight+100)+',50)';
-        canvasCtx.fillRect(x,canvas.height-barHeight/2,barWidth,barHeight);
-
-        x += barWidth + 1;
-
-        heightData.push(dataArray[i]);
-        //if (dataArray[i] > 150) {console.log("frec = ",i,"height = ", dataArray[i])}
-    }
-}

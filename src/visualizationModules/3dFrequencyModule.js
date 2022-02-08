@@ -23,7 +23,7 @@ const frequency3DDrawer = (function(){
     
         //-----------------------------//
         
-        renderer = new THREE.WebGLRenderer({canvas: canvas2});
+        renderer = new THREE.WebGLRenderer({canvas: canvas});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         scene = new THREE.Scene();
         light = new THREE.AmbientLight(0xAAAAAA, .7);
@@ -79,6 +79,7 @@ const frequency3DDrawer = (function(){
                 const arrayIndex = i*ver+j;
                 board[i][j].scale.set(1, Math.max(dataArray[arrayIndex]/15,.5), 1);
                 board[i][j].material.color.setRGB(i/hor,dataArray[arrayIndex]/255,j/ver);
+                // board[i][j].material.color.fromArray(computeColor());
             }
         }
         
@@ -90,8 +91,12 @@ const frequency3DDrawer = (function(){
         return data.reduce((pv,cv) => cv/data.length + pv)/150;
     }
 
+    function computeColor(data, xPos, yPos){
+
+    }
+
     function adaptSize(){
-        ThreeUtilities.adaptSize(canvas2,camera,renderer);
+        ThreeUtilities.adaptSize(canvas,camera,renderer);
     };
 
     return {

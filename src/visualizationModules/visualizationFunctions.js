@@ -12,7 +12,7 @@ function drawGrowingCircle(analyser){
 
     //-----------------------------//
     
-    const renderer = new THREE.WebGLRenderer({canvas: canvas2});
+    const renderer = new THREE.WebGLRenderer({canvas: canvas});
     const camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
     const scene = new THREE.Scene();
     const light = new THREE.DirectionalLight(/*0xBBBBBB, .5*/);
@@ -53,7 +53,7 @@ function drawGrowingCircle(analyser){
     }
 
     function adaptSize(){
-        ThreeUtilities.adaptSize(canvas2,camera,renderer);
+        ThreeUtilities.adaptSize(canvas,camera,renderer);
     };
 }
 

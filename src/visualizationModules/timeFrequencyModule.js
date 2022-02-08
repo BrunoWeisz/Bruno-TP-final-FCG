@@ -19,13 +19,13 @@ const timeFrequencyDrawer = (function(){
         let fov = 75;
         let ratio = canvas.clientWidth / canvas.clientHeight;
         let near = .1;
-        let far = 300;
+        let far = 350;
         cameraDistance = 150;
         cameraHeigth = 60;
         cameraXPosition = frecWid/2;
         
         scene = new THREE.Scene();
-        renderer = new THREE.WebGLRenderer({canvas: canvas2});
+        renderer = new THREE.WebGLRenderer({canvas: canvas});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         camera.position.set(cameraXPosition,cameraHeigth,cameraDistance);
         camera.lookAt(0,0,0);
@@ -75,7 +75,7 @@ const timeFrequencyDrawer = (function(){
     };
 
     function adaptSize(){
-        ThreeUtilities.adaptSize(canvas2,camera,renderer);
+        ThreeUtilities.adaptSize(canvas,camera,renderer);
     };
 
     
