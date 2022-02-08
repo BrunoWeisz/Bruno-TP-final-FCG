@@ -10,7 +10,7 @@ const ThreeUtilities = (function(){
 
         function cameraDistance3dFrequency(settings){
             let div = settings.divissions;
-            return [div/2+10,div+10];
+            return [div/2,div+10];
         }
 
         return {
@@ -27,8 +27,15 @@ const ThreeUtilities = (function(){
             return data*scale; 
         }
 
+        function scale3dFrequency(data, settings){
+            let camDist = Distance.cameraDistance3dFrequency(settings)[0];
+            let scale = data/(130/camDist);
+            return Math.max(scale,.1)
+        }
+
         return {
-            scale2dFrequency
+            scale2dFrequency,
+            scale3dFrequency
         }
 
     })();

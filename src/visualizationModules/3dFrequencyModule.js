@@ -32,10 +32,11 @@ const frequency3DDrawer = (function(){
         renderer = new THREE.WebGLRenderer({canvas: canvas});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         scene = new THREE.Scene();
-        light = new THREE.AmbientLight(0xAAAAAA, .7);
+        light = new THREE.DirectionalLight(0xAAAAAA, .7);
         scene.add(light);
-        //light.position.set(0,10,0);
-        //light.target.position.set(0,0,0);
+        scene.add(light.target);
+        light.position.set(0,cameraY,cameraZ);
+        light.target.position.set(0,0,0);
         camera.position.set(0,cameraY,cameraZ);
         camera.lookAt(0,0,0);
     
@@ -83,9 +84,9 @@ const frequency3DDrawer = (function(){
         for(let i = 0; i < hor; i++ ){
             for(let j = 0; j < ver; j++ ){
                 const arrayIndex = i*ver+j;
-                board[i][j].scale.set(1, Math.max(dataArray[arrayIndex]/15,.5), 1);
-                board[i][j].material.color.setRGB(i/hor,dataArray[arrayIndex]/255,j/ver);
-                // board[i][j].material.color.fromArray(computeColor());
+                board[i][j].scale.set(1, computeScale(dataArray[arrayIndex]), 1);
+                board[i][j].material.color.fromArray(computeColor(dataArray[arrayIndex], i, j));
+                board[i][j].material.emissive.fromArray(computeColor(dataArray[arrayIndex], i, j));
             }
         }
         
@@ -94,11 +95,11 @@ const frequency3DDrawer = (function(){
     };
 
     function computeScale(data){
-        return data.reduce((pv,cv) => cv/data.length + pv)/150;
+        return ThreeUtilities.Scale.scale3dFrequency(data, visualizationSettings);
     }
 
     function computeColor(data, xPos, yPos){
-
+        return ThreeUtilities.ColorStyle.computeFullColorXY(data, xPos, yPos, hor);
     }
 
     function adaptSize(){

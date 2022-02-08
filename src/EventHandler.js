@@ -13,6 +13,10 @@ const EventHandler = (function(){
             let controlsDiv = document.createElement("div");
             controlsDiv.classList.add("controls-2d");
             document.body.appendChild(controlsDiv);
+            let widthList = document.createElement("ul");
+            widthList.classList.add("width-list");
+            controlsDiv.appendChild(widthList);
+            currentSettingsBar = controlsDiv;
             return controlsDiv;
         }   
 
@@ -32,10 +36,7 @@ const EventHandler = (function(){
 
         function set2DFrequency(){
             let div = createControlPannel();
-            let widthList = document.createElement("ul");
-            widthList.classList.add("width-list");
-            div.appendChild(widthList);
-            currentSettingsBar = div;
+            let widthList = div.firstChild;
             for (let i = 0; i < 6; i++){
                 addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
             }
@@ -43,10 +44,7 @@ const EventHandler = (function(){
 
         function set3DFrequency(){
             let div = createControlPannel();
-            let widthList = document.createElement("ul");
-            widthList.classList.add("width-list");
-            div.appendChild(widthList);
-            currentSettingsBar = div;
+            let widthList = div.firstChild;
             for (let i = 0; i < 4; i++){
                 addSizeControllerToList(widthList, `${2**(3+i)} x ${2**(3+i)}`, 2**(3+i), changeSize);
             }
