@@ -31,14 +31,20 @@ const Visualization = (function(){
     function to3DFrequency(){
         EventHandler.VisualizationEvents.set3DFrequency();
     }
+    function toHeightmap(){
+        EventHandler.VisualizationEvents.setHeightmap();
+    }
+    function toTimeFrequency(){
+        EventHandler.VisualizationEvents.setTimeFrequency();
+    }
 
     const visualizationSetup = {
         "frequency-1": to2DFrequency,
         // "osciloscope-1": toThree,
         "growing-circle": toThree,
         "frequency-3d": to3DFrequency,
-        "frequency-heightmap": toThree,
-        "time-frequency": toThree
+        "frequency-heightmap": toHeightmap,
+        "time-frequency": toTimeFrequency
     }
 
     const defaultVisualizationSettings = {
@@ -47,6 +53,12 @@ const Visualization = (function(){
         },
         "frequency-3d": {
             divissions: 32
+        },
+        "frequency-heightmap": {
+            divissions: 64
+        },
+        "time-frequency": {
+            divissions: 512
         }
     }
 

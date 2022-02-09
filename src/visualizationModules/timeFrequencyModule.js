@@ -8,21 +8,25 @@ const timeFrequencyDrawer = (function(){
 
     let camera, renderer, scene, light, analyserNode, dataArray, wid, frecWid;
     let advanced, pace, badgeManager;
-    let cameraDistance, cameraXPosition, cameraHeigth;
+    let cameraDistance, cameraXPosition, cameraHeigth, visualizationSettings;
 
-    function draw(analyser){
+    function draw(analyser, visualization){
+        visualizationSettings = visualization;
         analyserNode = analyser;
-        drawTimeFrequencyWithWidth(512);
+        let divissions = visualizationSettings.divissions;
+        drawTimeFrequencyWithWidth(divissions);
     }
 
     function setThreeJS(){
         let fov = 75;
         let ratio = canvas.clientWidth / canvas.clientHeight;
         let near = .1;
-        let far = 350;
-        cameraDistance = 150;
-        cameraHeigth = 60;
-        cameraXPosition = frecWid/2;
+
+        [cameraXPosition, cameraHeigth, cameraDistance] = ThreeUtilities.Distance.cameraDistanceTimeFrequency(visualizationSettings);
+        let far = cameraDistance + cameraHeigth;
+        // cameraDistance = 150;
+        // cameraHeigth = 60;
+        // cameraXPosition = frecWid/2;
         
         scene = new THREE.Scene();
         renderer = new THREE.WebGLRenderer({canvas: canvas});

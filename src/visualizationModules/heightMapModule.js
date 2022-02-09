@@ -4,12 +4,15 @@ import { ThreeUtilities } from './utilities/ThreeUtilities.js';
 const heightMapFrequencyDrawer = (function(){
 
     let camera, renderer, scene, light, analyserNode, dataArray, hor, ver;
+    let visualizationSettings;
 
     let vertices, colors, heightmap, index;
     
-    function draw(analyser){
+    function draw(analyser, settings){
+        visualizationSettings = settings;
         analyserNode = analyser;
-        drawHeightmapFrequencyWithSize(64, 64);
+        let divissionsPerSide = visualizationSettings.divissions;
+        drawHeightmapFrequencyWithSize(divissionsPerSide, divissionsPerSide);
     }
 
     function drawHeightmapFrequencyWithSize(_hor, _ver){
@@ -21,19 +24,23 @@ const heightMapFrequencyDrawer = (function(){
         let fov = 75;
         let ratio = canvas.clientWidth / canvas.clientHeight;
         let near = .1;
-        let far = 100;
+
+        let cameraY, cameraZ;
+        [cameraY, cameraZ] = ThreeUtilities.Distance.cameraDistanceHeightmap(visualizationSettings);
+        let far = cameraZ+50;
+
     
         //-----------------------------//
         
         renderer = new THREE.WebGLRenderer({canvas: canvas});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         scene = new THREE.Scene();
-        light = new THREE.DirectionalLight(0xFFFFFF, 1);
+        light = new THREE.DirectionalLight(0xFFFFFF, 2);
 
         scene.add(light);
-        light.position.set(0,10,0);
+        light.position.set(0,cameraY,cameraZ);
         light.target.position.set(0,0,0);
-        camera.position.set(0,20,45);
+        camera.position.set(0,cameraY,cameraZ);
         camera.lookAt(0,0,0);
     
         vertices = [];
@@ -44,7 +51,6 @@ const heightMapFrequencyDrawer = (function(){
             for(let j = -ver/2; j < ver/2; j++ ){
                 vertices.push([i,0,j]);
                 colors.push([0.2 + i/(hor*0.8), 0, 0.2 + j/(ver*0.8)]);
-                // colors.push([1,1,1]);
             }
         }
         for(let i = 0; i < hor - 1; i++ ){

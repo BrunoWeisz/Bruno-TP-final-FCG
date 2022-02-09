@@ -32,7 +32,7 @@ const frequency3DDrawer = (function(){
         renderer = new THREE.WebGLRenderer({canvas: canvas});
         camera = new THREE.PerspectiveCamera(fov, ratio, near, far);
         scene = new THREE.Scene();
-        light = new THREE.DirectionalLight(0xAAAAAA, .7);
+        light = new THREE.DirectionalLight(0xFFFFFF, .5);
         scene.add(light);
         scene.add(light.target);
         light.position.set(0,cameraY,cameraZ);

@@ -10,12 +10,37 @@ const ThreeUtilities = (function(){
 
         function cameraDistance3dFrequency(settings){
             let div = settings.divissions;
-            return [div/2,div+10];
+            return [div/2+10,div+10];
+        }
+
+        function cameraDistanceHeightmap(settings){
+            return cameraDistance3dFrequency(settings);
+        }
+
+        function heigthForTimeFrequency(divissions) {
+            switch (divissions){
+                case 32: return 10;
+                case 64: return 20;
+                case 128: return 30;
+                case 256: return 120;
+                case 512: return 200;
+                case 1024: return 500;
+            }
+        }
+
+        function cameraDistanceTimeFrequency(settings){
+            let div = settings.divissions;
+            let cameraDistance = 150;
+            let cameraHeigth = heigthForTimeFrequency(div);
+            let cameraXPosition = div/6;
+            return [cameraXPosition, cameraHeigth, cameraDistance];
         }
 
         return {
             cameraDistance2dFrequency,
-            cameraDistance3dFrequency
+            cameraDistance3dFrequency,
+            cameraDistanceHeightmap,
+            cameraDistanceTimeFrequency
         }
     })();
 
@@ -27,10 +52,11 @@ const ThreeUtilities = (function(){
             return data*scale; 
         }
 
-        function scale3dFrequency(data, settings){
+        function scale3dFrequency(data, settings){ 
             let camDist = Distance.cameraDistance3dFrequency(settings)[0];
+            //let scale = Math.log2((data*2000 + 1) / 256);  
             let scale = data/(130/camDist);
-            return Math.max(scale,.1)
+            return Math.max(scale,.01)
         }
 
         return {

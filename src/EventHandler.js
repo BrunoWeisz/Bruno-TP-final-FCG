@@ -5,19 +5,18 @@ const EventHandler = (function(){
 
     const VisualizationEvents = (function(){
 
-        let currentSettingsBar = document.createElement("div");
-        document.body.appendChild(currentSettingsBar);
+        let settingsBar;        
 
-        function createControlPannel(){
-            document.body.removeChild(currentSettingsBar);
-            let controlsDiv = document.createElement("div");
-            controlsDiv.classList.add("controls-2d");
-            document.body.appendChild(controlsDiv);
+        function addOptionsBar(){
+            settingsBar = document.createElement("div");
+            settingsBar.classList.add("controls-2d");
+            document.body.appendChild(settingsBar);  
+        }
+
+        function createSizeList(){
             let widthList = document.createElement("ul");
             widthList.classList.add("width-list");
-            controlsDiv.appendChild(widthList);
-            currentSettingsBar = controlsDiv;
-            return controlsDiv;
+            settingsBar.appendChild(widthList);
         }   
 
         function addSizeControllerToList(aListElement, aTextContent, aValue, aHandler){
@@ -34,17 +33,45 @@ const EventHandler = (function(){
             Visualization.changeDivission(aValue);
         }
 
+        function clearSettings(){
+            Array.from(settingsBar.children).forEach(el => {settingsBar.removeChild(el)});
+        }
+
+        function setHeightmap(){
+            clearSettings();
+            createSizeList();
+            let widthList = settingsBar.firstChild;
+            for (let i = 0; i < 4; i++){
+                addSizeControllerToList(widthList, `${2**(3+i)} x ${2**(3+i)}`, 2**(3+i), changeSize);
+            }
+        }
+
+        function setTimeFrequency(){
+            clearSettings();
+        }
+
         function set2DFrequency(){
-            let div = createControlPannel();
-            let widthList = div.firstChild;
+            clearSettings();
+            createSizeList();
+            let widthList = settingsBar.firstChild;
+            for (let i = 0; i < 6; i++){
+                addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
+            }
+        }
+
+        function setTimeFrequency(){
+            clearSettings();
+            createSizeList();
+            let widthList = settingsBar.firstChild;
             for (let i = 0; i < 6; i++){
                 addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
             }
         }
 
         function set3DFrequency(){
-            let div = createControlPannel();
-            let widthList = div.firstChild;
+            clearSettings();
+            createSizeList();
+            let widthList = settingsBar.firstChild;
             for (let i = 0; i < 4; i++){
                 addSizeControllerToList(widthList, `${2**(3+i)} x ${2**(3+i)}`, 2**(3+i), changeSize);
             }
@@ -52,7 +79,10 @@ const EventHandler = (function(){
 
         return {
             set2DFrequency,
-            set3DFrequency
+            set3DFrequency,
+            addOptionsBar,
+            setHeightmap,
+            setTimeFrequency
         }
 
     })();
@@ -84,6 +114,7 @@ const EventHandler = (function(){
 
         removeLoadFile();
         addSelector();
+        VisualizationEvents.addOptionsBar();
         // addCanvas();
     
         AudioManager.setUpAudio(audioEl);
