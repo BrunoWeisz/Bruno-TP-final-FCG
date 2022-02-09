@@ -52,7 +52,7 @@ const timeFrequencyDrawer = (function(){
         advanced = 0;
         pace = -1;
         
-        badgeManager = new BadgeManager(advanced, pace, frecWid, scene);
+        badgeManager = new BadgeManager(advanced, pace, frecWid, scene, visualizationSettings);
 
         analyserNode.fftSize = wid;
         let bufferLength = analyserNode.frequencyBinCount;

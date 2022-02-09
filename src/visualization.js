@@ -1,5 +1,5 @@
 import EventHandler from './EventHandler.js';
-import {drawOsciloscope, drawGrowingCircle} from './visualizationModules/visualizationFunctions.js';
+// import {drawOsciloscope, drawGrowingCircle} from './visualizationModules/visualizationFunctions.js';
 import { timeFrequencyDrawer } from './visualizationModules/timeFrequencyModule.js';
 import {heightMapFrequencyDrawer} from './visualizationModules/heightMapModule.js';
 import {frequency3DDrawer} from './visualizationModules/3dFrequencyModule.js';
@@ -14,8 +14,8 @@ const Visualization = (function(){
 
     const visualizations = {
         "frequency-1": DrawFrequency2D.draw,
-        // "osciloscope-1": Osciloscope.draw,
-        "growing-circle": drawGrowingCircle,
+        "osciloscope-1": Osciloscope.draw,
+        // "growing-circle": drawGrowingCircle,
         "frequency-3d": frequency3DDrawer.draw,
         "frequency-heightmap": heightMapFrequencyDrawer.draw,
         "time-frequency": timeFrequencyDrawer.draw
@@ -37,10 +37,13 @@ const Visualization = (function(){
     function toTimeFrequency(){
         EventHandler.VisualizationEvents.setTimeFrequency();
     }
+    function toOsciloscope(){
+        EventHandler.VisualizationEvents.setOsciloscope();
+    }
 
     const visualizationSetup = {
         "frequency-1": to2DFrequency,
-        // "osciloscope-1": toThree,
+        "osciloscope-1": toOsciloscope,
         "growing-circle": toThree,
         "frequency-3d": to3DFrequency,
         "frequency-heightmap": toHeightmap,
@@ -58,6 +61,9 @@ const Visualization = (function(){
             divissions: 64
         },
         "time-frequency": {
+            divissions: 512
+        },
+        "osciloscope-1": {
             divissions: 512
         }
     }

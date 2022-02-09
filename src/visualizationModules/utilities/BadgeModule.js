@@ -1,4 +1,5 @@
 import * as THREE from 'https://cdn.skypack.dev/three';
+import { ThreeUtilities } from './ThreeUtilities.js';
 
 function Badge(frecWid){
     this.frecWid = frecWid;
@@ -87,7 +88,8 @@ Badge.prototype.addToScene = function(aScene){
 }
 
 Badge.prototype.computeHeight = function(data){
-    return data/5;
+    return ThreeUtilities.Scale.scaleTimeFrequency(data, {divissions: this.frecWid});
+    // return data/5;
 }
 
 Badge.prototype.computeMountainColor = function(data){

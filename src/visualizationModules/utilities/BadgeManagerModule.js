@@ -1,10 +1,12 @@
 import {Badge} from './BadgeModule.js';
+import { ThreeUtilities } from './ThreeUtilities.js';
 
-function BadgeManager(initialZPosition, pace, frecWid, scene){
+function BadgeManager(initialZPosition, pace, frecWid, scene, settings){
     this.pace = pace;
     this.scene = scene;
     this.currentZPosition = initialZPosition;
     this.frecWid = frecWid;
+    this.settings = settings;
 
     this.badges = [];
     this.badgeMaxLength = 20;
@@ -20,8 +22,12 @@ BadgeManager.prototype.addBadge = function(newBadge){
     }
 }
 
+BadgeManager.prototype.createBadge = function(){
+    return new Badge(this.frecWid);
+}
+
 BadgeManager.prototype.beginBadges = function(){
-    let newBadge = new Badge(this.frecWid);
+    let newBadge = this.createBadge();
     newBadge.addInitialRow(this.currentZPosition - this.pace, new Array(this.frecWid).fill(0));
     this.addBadge(newBadge);    
 }
@@ -38,7 +44,7 @@ BadgeManager.prototype.addRow = function(heightData){
         currentBadge.addRow(heightData, this.currentZPosition);
     } else {
         let repeatingData1 = currentBadge.lastHeigthData(1);
-        let newBadge = new Badge(this.frecWid);
+        let newBadge = this.createBadge();
         newBadge.addInitialRow(this.currentZPosition - 1*this.pace, repeatingData1);
         newBadge.addRow(heightData, this.currentZPosition);
         currentBadge.addRow(heightData, this.currentZPosition);

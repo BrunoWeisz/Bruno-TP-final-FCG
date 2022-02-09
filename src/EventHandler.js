@@ -48,18 +48,14 @@ const EventHandler = (function(){
 
         function setTimeFrequency(){
             clearSettings();
-        }
-
-        function set2DFrequency(){
-            clearSettings();
             createSizeList();
             let widthList = settingsBar.firstChild;
-            for (let i = 0; i < 6; i++){
-                addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
+            for (let i = 0; i < 4; i++){
+                addSizeControllerToList(widthList, `${2**(7+i)}`, 2**(7+i), changeSize);
             }
         }
 
-        function setTimeFrequency(){
+        function set2DFrequency(){
             clearSettings();
             createSizeList();
             let widthList = settingsBar.firstChild;
@@ -77,12 +73,22 @@ const EventHandler = (function(){
             }
         }
 
+        function setOsciloscope(){
+            clearSettings();
+            createSizeList();
+            let widthList = settingsBar.firstChild;
+            for (let i = 0; i < 6; i++){
+                addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
+            }
+        }
+
         return {
             set2DFrequency,
             set3DFrequency,
             addOptionsBar,
             setHeightmap,
-            setTimeFrequency
+            setTimeFrequency,
+            setOsciloscope
         }
 
     })();
