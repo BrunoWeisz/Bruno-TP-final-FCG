@@ -45,7 +45,8 @@ const DrawFrequency2D = (function(){
         ThreeUtilities.adaptSize(canvas,camera,renderer);
     };
 
-    function draw(analyser, vSettings = {divissions: 1024}){
+    function draw(analyser, vSettings){
+        console.log(vSettings)
         analyserNode = analyser;
         visualizationSettings = vSettings;
         barCount = visualizationSettings.divissions;
@@ -69,9 +70,10 @@ const DrawFrequency2D = (function(){
 
         for (let i = 0; i < barCount; i++){
             bars[i].scale.set(1, Math.max(computeScale(dataArray[i]),.01), 1);
-            bars[i].material.color.fromArray(computeColor(dataArray[i], i, barCount));
+            // bars[i].material.color.fromArray(computeColor(dataArray[i], i, barCount));
+            bars[i].material.color = computeColor(i, dataArray[i], barCount);
+            
         }
-
         renderer.render( scene, camera );
         animationFrameId = requestAnimationFrame(render);
     }
@@ -80,8 +82,12 @@ const DrawFrequency2D = (function(){
         return ThreeUtilities.Scale.scale2dFrequency(data, visualizationSettings);
     }
 
-    function computeColor(data, ind, maxIndex){
-        return ThreeUtilities.ColorStyle.computeFullColorX(data,ind,barCount);
+    // function computeColor(data, ind, maxIndex){
+    //     return ThreeUtilities.ColorStyle.computeFullColorX(data,ind,barCount);
+    // }
+
+    function computeColor(x, y, maxX){
+        return ThreeUtilities.ColorStyle.computeFullColorX(x,y,maxX, visualizationSettings);
     }
 
     return {

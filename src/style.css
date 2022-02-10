@@ -39,10 +39,12 @@ canvas{
     top: 90%;
     height: 10%;
     z-index: 0;
+    gap: 50px;
     background-color: transparent;
 }
 
-.width-list{
+.width-list,
+.style-list{
     display: flex;
     gap: 30px;
     list-style-type: none;

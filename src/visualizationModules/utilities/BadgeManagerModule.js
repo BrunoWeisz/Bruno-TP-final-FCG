@@ -23,7 +23,8 @@ BadgeManager.prototype.addBadge = function(newBadge){
 }
 
 BadgeManager.prototype.createBadge = function(){
-    return new Badge(this.frecWid);
+    // return new Badge(this.frecWid);
+    return new Badge(this.settings);
 }
 
 BadgeManager.prototype.beginBadges = function(){

@@ -22,7 +22,7 @@ const frequency3DDrawer = (function(){
         let ratio = canvas.clientWidth / canvas.clientHeight;
         let near = .1;
         
-        console.log(visualizationSettings);
+        console.log("vs:", visualizationSettings);
         let cameraY, cameraZ;
         [cameraY,cameraZ] = ThreeUtilities.Distance.cameraDistance3dFrequency(visualizationSettings);
         let far = cameraZ+50;
@@ -85,8 +85,9 @@ const frequency3DDrawer = (function(){
             for(let j = 0; j < ver; j++ ){
                 const arrayIndex = i*ver+j;
                 board[i][j].scale.set(1, computeScale(dataArray[arrayIndex]), 1);
-                board[i][j].material.color.fromArray(computeColor(dataArray[arrayIndex], i, j));
-                board[i][j].material.emissive.fromArray(computeColor(dataArray[arrayIndex], i, j));
+                let color = computeColor(i, dataArray[arrayIndex], j, hor);
+                board[i][j].material.color = color;
+                board[i][j].material.emissive = color;
             }
         }
         
@@ -98,8 +99,8 @@ const frequency3DDrawer = (function(){
         return ThreeUtilities.Scale.scale3dFrequency(data, visualizationSettings);
     }
 
-    function computeColor(data, xPos, yPos){
-        return ThreeUtilities.ColorStyle.computeFullColorXY(data, xPos, yPos, hor);
+    function computeColor(x,y,z,maxXZ){
+        return ThreeUtilities.ColorStyle.computeFullColorXY(x,y,z,maxXZ,visualizationSettings);
     }
 
     function adaptSize(){

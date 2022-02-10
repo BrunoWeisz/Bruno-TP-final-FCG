@@ -1,4 +1,4 @@
-// import * as THREE from 'https://cdn.skypack.dev/three';
+import * as THREE from 'https://cdn.skypack.dev/three';
 
 const ThreeUtilities = (function(){
 
@@ -102,12 +102,62 @@ const ThreeUtilities = (function(){
 
     const ColorStyle = (function(){
 
-        function computeFullColorX(data, index, maxIndex){
-            return [index/maxIndex,data/255,index/maxIndex];
+        function rgbColor(r,g,b){
+            return new THREE.Color(`rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`);
         }
 
-        function computeFullColorXY(data, xPos, yPos, maxSide){
-            return [xPos/maxSide, data/255, yPos/maxSide];
+        function mountain(y){
+    
+            let col = [0,0,0];
+            if (y < 30){
+                col = [0,10,240];
+            } else if (y >= 30 && y < 60){
+                col = [71,218,116];
+            } else if (y >= 60 && y < 120){
+                col = [30,196,100];
+            } else if (y >= 120 && y < 150){
+                col = [35, 144, 79];
+            } else if (y >= 150 && y < 190){
+                col = [85,65,36];
+            } else if (y >= 190 && y < 210){
+                col = [60, 37,21];
+            } else if (y >= 210){
+                col = [200,200,200];
+            }
+            
+            return rgbColor(col[0],col[1],col[2]);
+        }
+
+        function rainbow2d(x,y,maxX){ // x = [0,maxX-1] y = [0,255]
+            let r = x*255/((maxX-1));
+            let g = y;
+            let b = 255-r;
+            return rgbColor(r,g,b);
+        }
+
+        function rainbow3d(x,y,z,maxXZ){ // x,z = [0,maxXZ-1] y = [0,255]
+            let r = x*255/((maxXZ-1));
+            let g = y;
+            let b = z*255/(maxXZ-1);
+            return rgbColor(r,g,b);
+        }
+
+        function computeFullColorX(x, y, maxX, vs){
+            if (vs.style == "Rainbow"){return rainbow2d(x,y,maxX)}
+            else if (vs.style == "Mountain"){return mountain(y)}
+            else {
+                console.log("error con el color");
+                return rgbColor(255,255,255);
+            } 
+        }
+
+        function computeFullColorXY(x,y,z,maxXZ,vs){
+            if (vs.style == "Rainbow"){return rainbow3d(x,y,z,maxXZ)}
+            else if (vs.style == "Mountain"){return mountain(y)}
+            else {
+                console.log("error con el color");
+                return rgbColor(255,255,255);
+            }
         } 
 
         function computeYColorX(data, index, maxIndex){

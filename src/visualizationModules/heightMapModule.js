@@ -103,8 +103,8 @@ const heightMapFrequencyDrawer = (function(){
         return ThreeUtilities.Scale.scaleHeightmap(data, visualizationSettings);
     }
 
-    function computeYColor(data){
-        return data/255;
+    function computeColor(x,y,z,maxXZ){
+        return ThreeUtilities.ColorStyle.computeFullColorXY(x,y,z,maxXZ,visualizationSettings);
     }
 
     function render(time) {
@@ -115,10 +115,14 @@ const heightMapFrequencyDrawer = (function(){
             for(let j = 0; j < ver; j++ ){
                 const arrayIndex = i*ver+j;
                 const bufferIndex = (i*ver+j)*3+1; 
-                // vertices[bufferIndex] = computeHeight(dataArray[arrayIndex]);
-                // colors[bufferIndex] = computeYColor(dataArray[arrayIndex]);
+                
                 heightmap.geometry.attributes.position.array[bufferIndex] = computeHeight(dataArray[arrayIndex]);
-                heightmap.geometry.attributes.color.array[bufferIndex] = computeYColor(dataArray[arrayIndex]);
+
+                let color = computeColor(i,dataArray[arrayIndex],j,hor);
+                let oldColor = heightmap.geometry.attributes.color.array;
+                oldColor[bufferIndex-1] = color.r;
+                oldColor[bufferIndex] = color.g;
+                oldColor[bufferIndex+1] = color.b;
             }
         }
         heightmap.geometry.attributes.position.needsUpdate = true;

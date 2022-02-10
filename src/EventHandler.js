@@ -72,6 +72,7 @@ const EventHandler = (function(){
 
 
         function addStyles(){
+            
             let styleList = createStyleList();
             
             let rainbowButton = document.createElement("li");
@@ -79,6 +80,14 @@ const EventHandler = (function(){
             styleList.appendChild(rainbowButton);
             rainbowButton.addEventListener("click", (ev)=>{
                 changeStyle(rainbowButton.textContent);
+            })
+
+            
+            let mountainButton = document.createElement("li");
+            mountainButton.textContent = "Mountain";
+            styleList.appendChild(mountainButton);
+            mountainButton.addEventListener("click", (ev)=>{
+                changeStyle(mountainButton.textContent);
             })
         }
 
@@ -89,9 +98,6 @@ const EventHandler = (function(){
             return styleList;
         }
 
-        function removeStyles(){
-
-        }
 
         function setHeightmap(){
             addPersonalizedSizes(3,4,'2d');
@@ -115,7 +121,6 @@ const EventHandler = (function(){
 
         function setOsciloscope(){
             addPersonalizedSizes(7,4,'1d');
-            addStyles();
         }
 
         return {
