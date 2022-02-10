@@ -52,19 +52,24 @@ const Visualization = (function(){
 
     const defaultVisualizationSettings = {
         "frequency-1": {
-            divissions: 1024
+            divissions: 1024,
+            style: "rainbow"
         },
         "frequency-3d": {
-            divissions: 32
+            divissions: 32,
+            style: "rainbow"
         },
         "frequency-heightmap": {
-            divissions: 64
+            divissions: 64,
+            style: "rainbow"
         },
         "time-frequency": {
-            divissions: 512
+            divissions: 512,
+            style: "rainbow"
         },
         "osciloscope-1": {
-            divissions: 512
+            divissions: 512,
+            style: "rainbow"
         }
     }
 
@@ -84,9 +89,15 @@ const Visualization = (function(){
         visualize(currentVisualizationName, currentAnalyser);
     }
 
+    function changeStyle(aNewStyleString){
+        currentVisualizationSettings[currentVisualizationName].style = aNewStyleString;
+        visualize(currentVisualizationName, currentAnalyser);
+    }
+
     return {
         visualize,
-        changeDivission
+        changeDivission,
+        changeStyle
     }
 })();
 

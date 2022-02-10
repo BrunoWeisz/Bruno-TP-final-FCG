@@ -48,9 +48,28 @@ canvas{
     list-style-type: none;
 }
 
-.width-list li{
+.width-list li,
+.style-list li{
     border: 2px solid white;
-    width: 50px;
+    height: 20px;
+    width: 80px;
     color: black;
-    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: large;
+    background-color: antiquewhite; 
+}
+
+.size-selected{
+    background-color: red;
+}
+
+.size-not-selected{
+    background-color: white;
+}
+
+.style-list{
+    color: black;
 }

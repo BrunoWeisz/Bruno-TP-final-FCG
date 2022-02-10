@@ -10,15 +10,15 @@ function BadgeManager(initialZPosition, pace, frecWid, scene, settings){
 
     this.badges = [];
     this.badgeMaxLength = 20;
-    this.badgeMaxPersistence = 4;
+    this.badgeMaxPersistence = 20;
 };
 
 BadgeManager.prototype.addBadge = function(newBadge){
     this.badges.push(newBadge);
     newBadge.addToScene(this.scene);
-    if (this.badges.length > 4){
-        this.badges[0].delete();
-        this.badges.shift;
+    if (this.badges.length > this.badgeMaxPersistence){
+        this.badges[0].removeFromScene(this.scene);
+        this.badges.shift();
     }
 }
 

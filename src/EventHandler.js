@@ -22,10 +22,30 @@ const EventHandler = (function(){
         function addSizeControllerToList(aListElement, aTextContent, aValue, aHandler){
             let e = document.createElement("li");
             e.textContent = aTextContent;
+            e.classList.add("size-not-selected");
             aListElement.appendChild(e);
             e.addEventListener("click", (ev) => {
                 aHandler(aValue);
+                clearSizeButtonBackgrounds();
+                showSelectedButton(ev.target);
             })
+        }
+
+        function showSelectedButton(anElement){
+            anElement.classList.add("size-selected");
+            anElement.classList.remove("size-not-selected");
+        }
+
+        function clearSizeButtonBackgrounds(){
+            Array.from(document.querySelectorAll(".width-list li")).forEach(el => {
+                el.classList.add("size-not-selected");
+                el.classList.remove("size-selected");
+            })
+        }
+
+        function changeStyle(aStyleString){
+            console.log("changing style to ", aStyleString);
+            Visualization.changeStyle(aStyleString);
         }
 
         function changeSize(aValue){
@@ -37,49 +57,65 @@ const EventHandler = (function(){
             Array.from(settingsBar.children).forEach(el => {settingsBar.removeChild(el)});
         }
 
-        function setHeightmap(){
+        function addPersonalizedSizes(base, to, format){
             clearSettings();
             createSizeList();
-            let widthList = settingsBar.firstChild;
-            for (let i = 0; i < 4; i++){
-                addSizeControllerToList(widthList, `${2**(3+i)} x ${2**(3+i)}`, 2**(3+i), changeSize);
+            let stringToShow = '';
+            
+            let widthList = document.querySelector(".width-list");
+            for (let i = 0; i < to; i++){
+                if (format == '1d') stringToShow = `${2**(base+i)}`;
+                else stringToShow = `${2**(base+i)} x ${2**(base+i)}`
+                addSizeControllerToList(widthList, stringToShow, 2**(base+i), changeSize);
             }
+        }
+
+
+        function addStyles(){
+            let styleList = createStyleList();
+            
+            let rainbowButton = document.createElement("li");
+            rainbowButton.textContent = "Rainbow";
+            styleList.appendChild(rainbowButton);
+            rainbowButton.addEventListener("click", (ev)=>{
+                changeStyle(rainbowButton.textContent);
+            })
+        }
+
+        function createStyleList(){
+            let styleList = document.createElement("ul");
+            styleList.classList.add("style-list");
+            settingsBar.appendChild(styleList);
+            return styleList;
+        }
+
+        function removeStyles(){
+
+        }
+
+        function setHeightmap(){
+            addPersonalizedSizes(3,4,'2d');
+            addStyles();
         }
 
         function setTimeFrequency(){
-            clearSettings();
-            createSizeList();
-            let widthList = settingsBar.firstChild;
-            for (let i = 0; i < 4; i++){
-                addSizeControllerToList(widthList, `${2**(7+i)}`, 2**(7+i), changeSize);
-            }
+            addPersonalizedSizes(7,4,'1d');
+            addStyles();
         }
 
         function set2DFrequency(){
-            clearSettings();
-            createSizeList();
-            let widthList = settingsBar.firstChild;
-            for (let i = 0; i < 6; i++){
-                addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
-            }
+            addPersonalizedSizes(5,6,'1d');
+            addStyles();
         }
 
         function set3DFrequency(){
-            clearSettings();
-            createSizeList();
-            let widthList = settingsBar.firstChild;
-            for (let i = 0; i < 4; i++){
-                addSizeControllerToList(widthList, `${2**(3+i)} x ${2**(3+i)}`, 2**(3+i), changeSize);
-            }
+            addPersonalizedSizes(3,4,'2d');
+            addStyles();
         }
 
         function setOsciloscope(){
-            clearSettings();
-            createSizeList();
-            let widthList = settingsBar.firstChild;
-            for (let i = 0; i < 6; i++){
-                addSizeControllerToList(widthList, `${2**(5+i)}`, 2**(5+i), changeSize);
-            }
+            addPersonalizedSizes(7,4,'1d');
+            addStyles();
         }
 
         return {

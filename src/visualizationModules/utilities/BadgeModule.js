@@ -16,6 +16,10 @@ function Badge(frecWid){
     this.heightmap.material.side = THREE.DoubleSide;
 }
 
+Badge.prototype.removeFromScene = function(aScene){
+    aScene.remove(this.heightmap);
+}
+
 Badge.prototype.length = function(){
     return this.vertices.length -1;
 }

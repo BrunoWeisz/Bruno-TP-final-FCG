@@ -4,7 +4,7 @@ import { ThreeUtilities } from './utilities/ThreeUtilities.js';
 
 const Osciloscope = (function(){
 
-    let analyserNode, renderer, camera, scene, light, pointCount, mesh, dataArray;
+    let analyserNode, renderer, camera, scene, light, pointCount, mesh, dataArray, heightFactor;
     let visualizationSettings;
     let vertex, colors,index;
 
@@ -12,8 +12,7 @@ const Osciloscope = (function(){
         console.log("started osciloscope 3d");
         let fov = 100;
         let ratio = canvas.clientWidth / canvas.clientHeight;
-        let near = .1;
-
+        let near = 0.1;
         let cameraDistance = ThreeUtilities.Distance.cameraDistance2dFrequency(visualizationSettings);
         let far = cameraDistance + 20;
 
@@ -26,9 +25,7 @@ const Osciloscope = (function(){
         scene.add(light);
         //light.position.set(3,3,5);
         camera.position.set(0,128,cameraDistance);
-        camera.lookAt(0,0,0);
-        
-        
+        camera.lookAt(0,128,0);
     }
 
     function draw(analyser, settings){
@@ -50,19 +47,20 @@ const Osciloscope = (function(){
         adaptSize();
         analyserNode.getByteTimeDomainData(dataArray);
         updateOsciloscope(dataArray);
-        // renderer.clear();
+        
         renderer.render( scene, camera );
         animationFrameId = requestAnimationFrame(render);
     }
 
     function setOsciloscope(){
+        heightFactor = 1;
         vertex = [];
         colors = [];
         index = [];
         console.log(`pointCount: ${pointCount}`)
         for(let i = -pointCount/2; i < pointCount/2; i++){
-            vertex.push([i, 0, 0]);
-            vertex.push([i,1,0]);
+            vertex.push([i, 128, 0]);
+            vertex.push([i,128 + heightFactor,0]);
             //-----------//
             colors.push([1,1,1]);
             colors.push([1,1,1]);
@@ -104,14 +102,12 @@ const Osciloscope = (function(){
             let bufferIndex = (j*2)*3 + 1;
             let bufferIndex2 = (j*2+1)*3 + 1; 
             let arrayIndex = j;
-            let height = computeScale()*dataArray[arrayIndex];
+            let height = computeScale()*(dataArray[arrayIndex]-128)+128;
             mesh.geometry.attributes.position.array[bufferIndex] = height;
-            mesh.geometry.attributes.position.array[bufferIndex2] = height+1;
+            mesh.geometry.attributes.position.array[bufferIndex2] = height + visualizationSettings.divissions / 128;
             // mesh.geometry.attributes.color.array[bufferIndex] = computeYColor(dataArray[arrayIndex]);
             // mesh.geometry.attributes.color.array[bufferIndex2] = computeYColor(dataArray[arrayIndex]);
         }
-        console.log(computeScale());
-        
 
         mesh.geometry.attributes.position.needsUpdate = true;
         // mesh.geometry.attributes.color.needsUpdate = true;
