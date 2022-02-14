@@ -14,9 +14,18 @@ const EventHandler = (function(){
         }
 
         function createSizeList(){
+            let divWidthList = document.createElement("div");
             let widthList = document.createElement("ul");
+            let p = document.createElement("p");
+
+            divWidthList.classList.add("div-width-list");
             widthList.classList.add("width-list");
-            settingsBar.appendChild(widthList);
+            p.classList.add("tag");
+            p.textContent = "Resolution:";
+
+            divWidthList.appendChild(p);
+            divWidthList.appendChild(widthList);
+            settingsBar.appendChild(divWidthList);
         }   
 
         function addSizeControllerToList(aListElement, aTextContent, aValue, aHandler){
@@ -75,6 +84,7 @@ const EventHandler = (function(){
             
             let styleList = createStyleList();
             
+            
             let rainbowButton = document.createElement("li");
             rainbowButton.textContent = "Rainbow";
             styleList.appendChild(rainbowButton);
@@ -92,9 +102,18 @@ const EventHandler = (function(){
         }
 
         function createStyleList(){
+            let divStyleList = document.createElement("div");
             let styleList = document.createElement("ul");
+            let p = document.createElement("p");
+
+            divStyleList.classList.add("div-style-list");
             styleList.classList.add("style-list");
-            settingsBar.appendChild(styleList);
+            p.classList.add("tag");
+            p.textContent = 'Styles:';
+            
+            divStyleList.appendChild(p);
+            divStyleList.appendChild(styleList);
+            settingsBar.appendChild(divStyleList);
             return styleList;
         }
 
@@ -134,13 +153,9 @@ const EventHandler = (function(){
 
     })();
 
-    const removeLoadFile = function(){
-        const loadElement = document.querySelector("#loadfile");
+    const removePresentation = function(){
+        const loadElement = document.querySelector("#presentation");
         loadElement.parentElement.removeChild(loadElement);
-    }
-
-    function addCanvas(){
-        document.body.appendChild(canvas);
     }
 
     const addSelector = function(){
@@ -151,6 +166,10 @@ const EventHandler = (function(){
             const selectedVisualization = ev.target.value;
             AudioManager.visualize(selectedVisualization);
         });
+
+        const audio = document.querySelector("audio");
+        audio.classList.toggle("invisible");
+        audio.classList.toggle("visible");
     }
 
     const handleFiles = function(){
@@ -159,7 +178,7 @@ const EventHandler = (function(){
         const audioEl = document.querySelector("audio");
         audioEl.src = audioUrl;
 
-        removeLoadFile();
+        removePresentation();
         addSelector();
         VisualizationEvents.addOptionsBar();
         // addCanvas();

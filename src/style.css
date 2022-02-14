@@ -11,6 +11,24 @@ html,body{
     z-index: 1;
 }
 
+#presentation{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 15%;
+    padding: 15px;
+    /* width: 40%; */
+
+    border: 3px solid black;
+    background-color: blueviolet;
+    border-radius: 10px;
+}
+
+#loadfile{
+    display: block;
+}
+
 canvas{
     display: block;
     position: absolute;
@@ -34,20 +52,56 @@ canvas{
 .controls-2d{
     display: flex;
     position: absolute;
+    justify-content: space-around;
     left: 0;
     width: 100%;
-    top: 90%;
+    top: 89%;
     height: 10%;
     z-index: 0;
-    gap: 50px;
+    gap: 100px;
     background-color: transparent;
+}
+
+.div-width-list,
+.div-style-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+
+    border: 4px solid white;
+    border-radius: 30px;
+    background-color: burlywood;
+}
+
+
+.div-width-list{
+    width: 70%;
+}
+
+.div-style-list{
+    width: 30%;
+}
+
+
+.tag{
+    color: blue;
+    font-size: 20px;
 }
 
 .width-list,
 .style-list{
     display: flex;
-    gap: 30px;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-around;
+    /* padding-right: 16px; */
+    height: 85%;
+    width: 90%;
     list-style-type: none;
+    opacity: 70%;
+    margin-block-start: 0%;
 }
 
 .width-list li,
@@ -55,10 +109,10 @@ canvas{
     border: 2px solid white;
     height: 20px;
     width: 80px;
-    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: black;
     font-weight: bold;
     font-size: large;
     background-color: antiquewhite; 

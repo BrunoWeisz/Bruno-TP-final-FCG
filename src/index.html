@@ -12,7 +12,10 @@
 </head>
 <body>
     
-    <input type="file" id = "loadfile">
+    <div id = 'presentation'>
+        <h1>Seleccione un archivo de audio desde su ordenador:</h1>
+        <input type="file" id = "loadfile">
+    </div>
     <select name = "visualization" class = "invisible" id = "selector">
         <option value = "frequency-1" > Frequency </option>
         <option value = "osciloscope-1" > Osciloscope </option>
@@ -21,7 +24,7 @@
         <option value = "frequency-heightmap"> Frequency Heightmap </option>
         <option value = "time-frequency"> Time & Frequency Heightmap </option>
     </select>
-    <audio src="" controls></audio>
+    <audio src="" controls class = "invisible"></audio>
     <!-- <canvas id = "visualization"></canvas>  -->
     <canvas id = "visualization-three" class = "visible"></canvas>
     

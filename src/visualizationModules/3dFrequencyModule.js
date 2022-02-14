@@ -62,13 +62,6 @@ const frequency3DDrawer = (function(){
             }
         }
     
-        for(let i = 0; i < hor; i++ ){
-            for(let j = 0; j < ver; j++ ){
-                board[i][j].material.color.setRGB(i/hor,0,j/ver);
-                //board[i][j].material.emissive.setRGB(i*256/hor+10,10,j*256/ver+10);
-            }
-        }
-    
         analyserNode.fftSize = hor*ver*2*2;
         let bufferLength = analyserNode.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);

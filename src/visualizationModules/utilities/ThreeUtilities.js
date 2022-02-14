@@ -55,10 +55,10 @@ const ThreeUtilities = (function(){
 
         function scaleFor3d(div, data){
             switch(div){
-                case 8: return data*4/100;
-                case 16: return data*8/100;
-                case 32: return data*12/100;
-                case 64: return data*16/100;
+                case 8: return data*4/130;
+                case 16: return data*8/130;
+                case 32: return data*12/130;
+                case 64: return data*16/130;
             }
         }
 
