@@ -30,8 +30,8 @@ const DrawFrequency2D = (function(){
 
     function setBars(){
         bars = [];
+        let planeGeo = new THREE.PlaneGeometry(1,1);
         for (let i = 0; i < barCount; i++){
-            let planeGeo = new THREE.PlaneGeometry(1,1);
             let material = new THREE.MeshBasicMaterial();
             let barMesh = new THREE.Mesh(planeGeo, material);
             barMesh.position.set(i-barCount/2,0,0);

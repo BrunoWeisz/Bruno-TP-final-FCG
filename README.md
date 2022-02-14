@@ -1,2 +1,1 @@
-# Template-Webpack-Project
-This is a basic template of a project using node.js, npm, and webpack.
+Para ejecutar el proyecto se debe hacer uso de un servidor local. Yo estuve usando live-server en linux sin ningun problema.
