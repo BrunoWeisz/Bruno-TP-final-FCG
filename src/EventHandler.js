@@ -172,25 +172,35 @@ const EventHandler = (function(){
         audio.classList.toggle("visible");
     }
 
-    const handleFiles = function(){
-        let file = this.files[0];
-        let audioUrl = window.URL.createObjectURL(file);
-        const audioEl = document.querySelector("audio");
-        audioEl.src = audioUrl;
-
+    const startVisualization = function(audioEl){
         removePresentation();
         addSelector();
         VisualizationEvents.addOptionsBar();
-        // addCanvas();
-    
         AudioManager.setUpAudio(audioEl);
+    }
+
+    const handleFiles = function(){
+        let file = this.files[0];
+        console.log('file:', file);
+        let audioUrl = window.URL.createObjectURL(file);
+        const audioEl = document.querySelector("audio");
+        audioEl.src = audioUrl;
+        console.log('url: ',audioUrl);
+        startVisualization(audioEl);
     }
 
     const setLoadFile = function(){
         document.querySelector("#loadfile").addEventListener("change", handleFiles, false);
     }
 
+   
+
+    const setFiles = function(){
+        setLoadFile();
+    }
+
     return {
+        setFiles,
         setLoadFile,
         VisualizationEvents
     }

@@ -16,13 +16,29 @@ html,body{
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    height: 15%;
+    /* height: 15%; */
     padding: 15px;
     /* width: 40%; */
 
     border: 3px solid black;
     background-color: blueviolet;
     border-radius: 10px;
+}
+
+#presentation > div:nth-child(2) {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 15px;
+    height: 3em;
+    border: 2px solid rgb(86, 26, 143);
+    background-color: rgb(105, 34, 172);
+}
+
+#presentation > div> input{
+    margin-left: 83px;
 }
 
 #loadfile{
@@ -62,6 +78,7 @@ canvas{
     background-color: transparent;
 }
 
+
 .div-width-list,
 .div-style-list{
     display: flex;
@@ -73,6 +90,11 @@ canvas{
     border: 4px solid white;
     border-radius: 30px;
     background-color: burlywood;
+}
+
+.div-width-list li:hover,
+.div-style-list li:hover{
+    cursor: pointer;
 }
 
 
